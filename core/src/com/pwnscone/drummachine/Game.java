@@ -17,6 +17,7 @@ public class Game extends ApplicationAdapter {
 		game = this;
 		mCurrentLevel = new Level();
 		mView = new View();
+		mCurrentLevel.create();
 	}
 
 	@Override
@@ -27,5 +28,10 @@ public class Game extends ApplicationAdapter {
 
 	public Level getLevel() {
 		return mCurrentLevel;
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		mView.resetCamera();
 	}
 }

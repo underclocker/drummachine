@@ -8,8 +8,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class View {
-	public static final float WIDTH = 9.0f;
-	public static final float HEIGHT = 16.0f;
+	public static float WIDTH = 9.0f;
+	public static float HEIGHT = 16.0f;
 
 	private OrthographicCamera mCamera;
 	private SpriteBatch mSpriteBatch;
@@ -19,7 +19,7 @@ public class View {
 		mCamera = new OrthographicCamera();
 		mSpriteBatch = new SpriteBatch();
 		mDebugRenderer = new Box2DDebugRenderer();
-		setupCamera();
+		resetCamera();
 	}
 
 	public void update() {
@@ -33,9 +33,11 @@ public class View {
 		mSpriteBatch.end();
 	}
 
-	public void setupCamera() {
+	public void resetCamera() {
+		float ratio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
+		WIDTH = HEIGHT * ratio;
 		mCamera.setToOrtho(false, WIDTH, HEIGHT);
-		// mCamera.translate(-WIDTH / 2.0f, -HEIGHT / 2.0f);
+		mCamera.translate(-WIDTH / 2.0f, -HEIGHT / 2.0f);
 		mCamera.update();
 	}
 }
