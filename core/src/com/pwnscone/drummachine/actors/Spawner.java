@@ -72,10 +72,10 @@ public class Spawner extends Actor {
 	public void update() {
 		if (mLevel.getFrame() == 0) {
 			Ball ball = (Ball) mLevel.createActor(Ball.class);
-			Vector2 offset = Misc.v0;
+			Vector2 offset = Misc.v2r0;
 			offset.set(0.0f, -.25f);
 			offset.rotate(mMainBody.getAngle() * Misc.RAD_TO_DEG);
-			Vector2 position = Misc.v1;
+			Vector2 position = Misc.v2r1;
 			position.set(mMainBody.getPosition());
 			position.add(offset);
 			Body ballBody = ball.mMainBody;

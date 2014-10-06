@@ -1,13 +1,16 @@
 package com.pwnscone.drummachine.util;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class Misc {
 	public static final float RAD_TO_DEG = (float) (180.0 / Math.PI);
 	public static final float DEG_TO_RAD = (float) (Math.PI / 180.0);
 
-	public static Vector2 v0 = new Vector2();
-	public static Vector2 v1 = new Vector2();
+	public static Vector2 v2r0 = new Vector2();
+	public static Vector2 v2r1 = new Vector2();
+
+	public static Vector3 v3r0 = new Vector3();
 
 	private static float[] randoms;
 	private static int randIndex;

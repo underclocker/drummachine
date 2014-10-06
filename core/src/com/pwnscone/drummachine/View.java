@@ -40,4 +40,8 @@ public class View {
 		mCamera.translate(-WIDTH / 2.0f, -HEIGHT / 2.0f);
 		mCamera.update();
 	}
+
+	public OrthographicCamera getCamera() {
+		return mCamera;
+	}
 }
