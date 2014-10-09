@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Vector3;
 public class SceneInputProcessor implements InputProcessor {
 	private float mScrollSpeed = 0.5f;
 	private float mDecaySpeed = 0.8f;
+	private float mMaxZoom = 5.0f;
+	private float mMinZoom = 0.25f;
 	private OrthographicCamera mCamera;
 	private boolean mZeroDown;
 	private boolean mOneDown;
@@ -16,9 +18,15 @@ public class SceneInputProcessor implements InputProcessor {
 	private Vector3 mOneDownPosition;
 	private Vector3 mZeroPosition;
 	private Vector3 mOnePosition;
+	private Vector3 mZeroDownScreenPosition;
+	private Vector3 mOneDownScreenPosition;
 	private Vector3 mZeroScreenPosition;
 	private Vector3 mOneScreenPosition;
+	private Vector3 mPinchPosition;
+	private Vector3 mPinchDownPosition;
 	private Vector2 mVelocity;
+	private float downZoom;
+	private float zoomVelocity;
 
 	public void create() {
 		mCamera = Game.get().getView().getCamera();
@@ -30,7 +38,13 @@ public class SceneInputProcessor implements InputProcessor {
 		mOneDownPosition = new Vector3();
 		mZeroScreenPosition = new Vector3();
 		mOneScreenPosition = new Vector3();
+		mZeroDownScreenPosition = new Vector3();
+		mOneDownScreenPosition = new Vector3();
+		mPinchPosition = new Vector3();
+		mPinchDownPosition = new Vector3();
 		mVelocity = new Vector2();
+		downZoom = 1.0f;
+		zoomVelocity = 0.0f;
 	}
 
 	@Override
@@ -53,23 +67,45 @@ public class SceneInputProcessor implements InputProcessor {
 		Vector3 touchCoord;
 		Vector3 touchDownPos;
 		Vector3 touchScreenPos;
+		Vector3 touchDownScreenPos;
+		Vector3 altTouchPos = null;
 		if (pointer == 0) {
 			touchCoord = mZeroPosition;
 			touchDownPos = mZeroDownPosition;
 			touchScreenPos = mZeroScreenPosition;
+			touchDownScreenPos = mZeroDownScreenPosition;
 			mZeroDown = true;
+			if (mOneDown) {
+				mOneDownScreenPosition.set(Gdx.input.getX(1), Gdx.input.getY(1), 0.0f);
+				mOnePosition.set(mOneDownScreenPosition);
+				mCamera.unproject(mOnePosition);
+				altTouchPos = mOnePosition;
+			}
 		} else if (pointer == 1) {
 			touchCoord = mOnePosition;
 			touchDownPos = mOneDownPosition;
 			touchScreenPos = mOneScreenPosition;
+			touchDownScreenPos = mOneDownScreenPosition;
 			mOneDown = true;
+			if (mZeroDown) {
+				mZeroDownScreenPosition.set(Gdx.input.getX(0), Gdx.input.getY(0), 0.0f);
+				mZeroPosition.set(mZeroDownScreenPosition);
+				mCamera.unproject(mZeroPosition);
+				altTouchPos = mZeroPosition;
+			}
 		} else {
 			return false;
 		}
+
 		touchScreenPos.set(screenX, screenY, 0.0f);
+		touchDownScreenPos.set(touchScreenPos);
 		touchCoord.set(touchScreenPos);
 		mCamera.unproject(touchCoord);
 		touchDownPos.set(touchCoord);
+		if (mZeroDown && mOneDown) {
+			downZoom = mCamera.zoom;
+			mPinchDownPosition.set(altTouchPos).add(touchDownPos).scl(0.5f);
+		}
 		return false;
 	}
 
@@ -138,12 +174,47 @@ public class SceneInputProcessor implements InputProcessor {
 			mVelocity.set((downPosition.x - position.x) * mScrollSpeed,
 					(downPosition.y - position.y) * mScrollSpeed);
 			mCamera.translate(mVelocity);
-			mCamera.update();
 		} else if (mZeroDown && mOneDown) {
-			// Zoom
+			mZeroScreenPosition.set(Gdx.input.getX(0), Gdx.input.getY(0), 0.0f);
+			mOneScreenPosition.set(Gdx.input.getX(1), Gdx.input.getY(1), 0.0f);
+			// Down delta
+			float ddx = (mZeroDownScreenPosition.x - mOneDownScreenPosition.x);
+			float ddy = (mZeroDownScreenPosition.y - mOneDownScreenPosition.y);
+			// Down dist
+			float ddist = (float) Math.sqrt(ddx * ddx + ddy * ddy);
+			// Current delta
+			float cdx = (mZeroScreenPosition.x - mOneScreenPosition.x);
+			float cdy = (mZeroScreenPosition.y - mOneScreenPosition.y);
+			// Current dist
+			float cdist = (float) Math.sqrt(cdx * cdx + cdy * cdy);
+
+			zoomVelocity = (ddist / cdist * downZoom - mCamera.zoom);
+
+			mPinchPosition.set(mZeroScreenPosition).add(mOneScreenPosition).scl(0.5f);
+			mCamera.unproject(mPinchPosition);
+
+			mVelocity.set((mPinchDownPosition.x - mPinchPosition.x) * mScrollSpeed,
+					(mPinchDownPosition.y - mPinchPosition.y) * mScrollSpeed);
 		} else {
 			mVelocity.scl(mDecaySpeed);
 			mCamera.translate(mVelocity);
+		}
+		zoomVelocity *= mDecaySpeed;
+		mCamera.zoom += zoomVelocity;
+		if (mCamera.zoom > mMaxZoom) {
+			mCamera.zoom = mMaxZoom;
+		} else if (mCamera.zoom < mMinZoom) {
+			mCamera.zoom = mMinZoom;
+		}
+		mCamera.update();
+		if (mZeroDown && mOneDown) {
+			float cachedPinchX = mPinchPosition.x;
+			float cachedPinchY = mPinchPosition.y;
+			mPinchPosition.set(mZeroScreenPosition).add(mOneScreenPosition).scl(0.5f);
+			mCamera.unproject(mPinchPosition);
+			cachedPinchX -= mPinchPosition.x;
+			cachedPinchY -= mPinchPosition.y;
+			mCamera.translate(cachedPinchX + mVelocity.x, cachedPinchY + mVelocity.y);
 			mCamera.update();
 		}
 	}
