@@ -1,16 +1,18 @@
-package com.pwnscone.drummachine;
+package com.pwnscone.drummachine.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.pwnscone.drummachine.Game;
+import com.pwnscone.drummachine.ui.InputManager.ControlStates;
 
 public class SceneInputProcessor implements InputProcessor {
 	private float mScrollSpeed = 0.5f;
 	private float mDecaySpeed = 0.8f;
 	private float mMaxZoom = 5.0f;
-	private float mMinZoom = 0.25f;
+	private float mMinZoom = 0.2f;
 	private OrthographicCamera mCamera;
 	private boolean mZeroDown;
 	private boolean mOneDown;
@@ -25,8 +27,8 @@ public class SceneInputProcessor implements InputProcessor {
 	private Vector3 mPinchPosition;
 	private Vector3 mPinchDownPosition;
 	private Vector2 mVelocity;
-	private float downZoom;
-	private float zoomVelocity;
+	private float mDownZoom;
+	private float mZoomVelocity;
 
 	public void create() {
 		mCamera = Game.get().getView().getCamera();
@@ -43,8 +45,8 @@ public class SceneInputProcessor implements InputProcessor {
 		mPinchPosition = new Vector3();
 		mPinchDownPosition = new Vector3();
 		mVelocity = new Vector2();
-		downZoom = 1.0f;
-		zoomVelocity = 0.0f;
+		mDownZoom = 1.0f;
+		mZoomVelocity = 0.0f;
 	}
 
 	@Override
@@ -96,14 +98,13 @@ public class SceneInputProcessor implements InputProcessor {
 		} else {
 			return false;
 		}
-
 		touchScreenPos.set(screenX, screenY, 0.0f);
 		touchDownScreenPos.set(touchScreenPos);
 		touchCoord.set(touchScreenPos);
 		mCamera.unproject(touchCoord);
 		touchDownPos.set(touchCoord);
 		if (mZeroDown && mOneDown) {
-			downZoom = mCamera.zoom;
+			mDownZoom = mCamera.zoom;
 			mPinchDownPosition.set(altTouchPos).add(touchDownPos).scl(0.5f);
 		}
 		return false;
@@ -151,11 +152,13 @@ public class SceneInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
+		mZoomVelocity += amount * Math.sqrt(mCamera.zoom) / (20.0f);
 		return false;
 	}
 
 	public void update() {
-		if (mZeroDown ^ mOneDown) {
+		if (InputManager.STATE == ControlStates.SELECT) {
+		} else if (mZeroDown ^ mOneDown) {
 			Vector3 position;
 			Vector3 downPosition;
 			int index;
@@ -188,7 +191,7 @@ public class SceneInputProcessor implements InputProcessor {
 			// Current dist
 			float cdist = (float) Math.sqrt(cdx * cdx + cdy * cdy);
 
-			zoomVelocity = (ddist / cdist * downZoom - mCamera.zoom);
+			mZoomVelocity = (ddist / cdist * mDownZoom - mCamera.zoom);
 
 			mPinchPosition.set(mZeroScreenPosition).add(mOneScreenPosition).scl(0.5f);
 			mCamera.unproject(mPinchPosition);
@@ -199,8 +202,8 @@ public class SceneInputProcessor implements InputProcessor {
 			mVelocity.scl(mDecaySpeed);
 			mCamera.translate(mVelocity);
 		}
-		zoomVelocity *= mDecaySpeed;
-		mCamera.zoom += zoomVelocity;
+		mZoomVelocity *= mDecaySpeed;
+		mCamera.zoom += mZoomVelocity;
 		if (mCamera.zoom > mMaxZoom) {
 			mCamera.zoom = mMaxZoom;
 		} else if (mCamera.zoom < mMinZoom) {

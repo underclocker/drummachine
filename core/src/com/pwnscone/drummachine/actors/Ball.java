@@ -18,6 +18,7 @@ public class Ball extends Actor {
 			World world = Game.get().getLevel().getWorld();
 			BodyDef bodyDef = new BodyDef();
 			bodyDef.type = BodyType.DynamicBody;
+			bodyDef.bullet = true;
 			Body body = world.createBody(bodyDef);
 			mMainBody = body;
 

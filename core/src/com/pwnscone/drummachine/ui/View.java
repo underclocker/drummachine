@@ -1,4 +1,4 @@
-package com.pwnscone.drummachine;
+package com.pwnscone.drummachine.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -6,10 +6,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.pwnscone.drummachine.Game;
 
 public class View {
 	public static float WIDTH = 9.0f;
 	public static float HEIGHT = 16.0f;
+	public static float DENSITY;
+
+	private static boolean RENDER_DEBUG = true;
 
 	private OrthographicCamera mCamera;
 	private SpriteBatch mSpriteBatch;
@@ -19,6 +23,7 @@ public class View {
 		mCamera = new OrthographicCamera();
 		mSpriteBatch = new SpriteBatch();
 		mDebugRenderer = new Box2DDebugRenderer();
+		DENSITY = Gdx.graphics.getDensity();
 		resetCamera();
 	}
 
@@ -27,7 +32,9 @@ public class View {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		World world = Game.get().getLevel().getWorld();
-		mDebugRenderer.render(world, mCamera.combined);
+		if (RENDER_DEBUG) {
+			mDebugRenderer.render(world, mCamera.combined);
+		}
 
 		mSpriteBatch.begin();
 		mSpriteBatch.end();

@@ -15,10 +15,15 @@ public class Level {
 	private HashMap<Class, Pool<?>> mActorPoolMap;
 	private ArrayList<Pool<?>> mActorPoolArrayList;
 	private ArrayList<Actor> mDestroyQueue;
-	private int mFramesPerBeat = 64;
+	private int mFramesPerBeat;
 	private int mFrame = 0;
+	private float mWidth;
+	private float mHeight;
 
 	public Level() {
+		mFramesPerBeat = 64;
+		mWidth = 100f;
+		mHeight = 100f;
 		mWorld = new World(new Vector2(0.0f, -4.9f), true);
 		mDestroyQueue = new ArrayList<Actor>(128);
 		mActorPoolMap = new HashMap<Class, Pool<?>>();
@@ -30,6 +35,8 @@ public class Level {
 
 	public void create() {
 		createActor(Spawner.class);
+		Spawner spawner2 = (Spawner) createActor(Spawner.class);
+		spawner2.setTransformation(0.05f, -10.0f, (float) Math.PI);
 	}
 
 	public void update() {

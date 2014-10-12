@@ -13,7 +13,7 @@ import com.pwnscone.drummachine.util.Misc;
 
 public class Spawner extends Actor {
 	private Level mLevel;
-	private float mSpeed = 16f;
+	private float mSpeed = 32.0f;
 
 	@Override
 	public void create() {
@@ -22,8 +22,9 @@ public class Spawner extends Actor {
 			World world = mLevel.getWorld();
 			BodyDef bodyDef = new BodyDef();
 			bodyDef.type = BodyType.KinematicBody;
-			Body body = world.createBody(bodyDef);
-			mMainBody = body;
+			Body mainBody = world.createBody(bodyDef);
+			mMainBody = mainBody;
+			mainBody.setUserData(this);
 
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.density = 0.5f;
@@ -37,7 +38,7 @@ public class Spawner extends Actor {
 			PolygonShape poly = new PolygonShape();
 			poly.set(verts);
 			fixtureDef.shape = poly;
-			body.createFixture(fixtureDef);
+			mainBody.createFixture(fixtureDef);
 			poly.dispose();
 
 			float[] verts2 = { 1, 2, -1, 2, 1, 0 };
@@ -45,7 +46,7 @@ public class Spawner extends Actor {
 			poly = new PolygonShape();
 			poly.set(verts2);
 			fixtureDef.shape = poly;
-			body.createFixture(fixtureDef);
+			mainBody.createFixture(fixtureDef);
 			poly.dispose();
 
 			float[] verts3 = { -1, 2, -2, 1, -1, 0, 0, 1 };
@@ -53,7 +54,7 @@ public class Spawner extends Actor {
 			poly = new PolygonShape();
 			poly.set(verts3);
 			fixtureDef.shape = poly;
-			body.createFixture(fixtureDef);
+			mainBody.createFixture(fixtureDef);
 			poly.dispose();
 
 			float[] verts4 = { -2, 1, -2, -2, -1, -3, -1, 0 };
@@ -61,8 +62,20 @@ public class Spawner extends Actor {
 			poly = new PolygonShape();
 			poly.set(verts4);
 			fixtureDef.shape = poly;
-			body.createFixture(fixtureDef);
+			mainBody.createFixture(fixtureDef);
 			poly.dispose();
+
+			// Hit Sensor
+			fixtureDef.isSensor = true;
+
+			float[] verts5 = { 1, -3, 2, -2, 2, 1, 1, 2, -1, 2, -2, 1, -2, -2, -1, -3 };
+			Misc.scaleArray(verts5, scale);
+			poly = new PolygonShape();
+			poly.set(verts5);
+			fixtureDef.shape = poly;
+			mMainBody.createFixture(fixtureDef);
+			poly.dispose();
+
 		} else {
 			mMainBody.setActive(true);
 		}
