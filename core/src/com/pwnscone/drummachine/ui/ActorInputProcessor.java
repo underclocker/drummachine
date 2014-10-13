@@ -65,10 +65,9 @@ public class ActorInputProcessor implements InputProcessor {
 				mDownOffset.set(actorPos.x, actorPos.y, 0.0f);
 				mDownOffset.sub(mPosition);
 				float dist = mDownOffset.len() / mCamera.zoom;
-				System.out.println(dist);
-				if (dist < 1.75f) {
+				if (dist < 1.75f * View.UI_SCALE) {
 					InputManager.EDIT = EditMode.TRANSLATE;
-				} else if (dist < 3.5f) {
+				} else if (dist < 3.5f * View.UI_SCALE) {
 					InputManager.EDIT = EditMode.ROTATE;
 					mRotation = selectedActor.getBody().getAngle()
 							- (float) Math.atan2(mDownOffset.y, mDownOffset.x);
@@ -157,7 +156,6 @@ public class ActorInputProcessor implements InputProcessor {
 
 				angle += Misc.TAU * (1 + laps);
 			}
-			System.out.println(angle);
 			body.setAngularVelocity(angle * 20.0f);
 		}
 	}

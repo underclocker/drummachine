@@ -16,6 +16,7 @@ import com.pwnscone.drummachine.util.Misc;
 public class View {
 	public static float WIDTH = 9.0f;
 	public static float HEIGHT = 16.0f;
+	public static float UI_SCALE = 1.0f;
 	public static float DENSITY;
 
 	private static boolean RENDER_DEBUG = true;
@@ -33,6 +34,7 @@ public class View {
 		mDebugRenderer = new Box2DDebugRenderer();
 
 		DENSITY = Gdx.graphics.getDensity();
+
 		resetCamera();
 	}
 
@@ -58,7 +60,7 @@ public class View {
 		if (actor != null) {
 			Vector3 position = Misc.v3r0;
 			position.set(actor.getPosition().x, actor.getPosition().y, 0.0f);
-			float scale = 8f * (mCamera.zoom);
+			float scale = 8f * (mCamera.zoom) * UI_SCALE;
 			float offset = .5f * scale;
 			float rotation = actor.getBody().getAngle() * Misc.RAD_TO_DEG;
 			mSpriteBatch.draw(mTranslateOverlay, position.x - offset, position.y - offset, scale,
@@ -74,6 +76,8 @@ public class View {
 	public void resetCamera() {
 		float ratio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
 		WIDTH = HEIGHT * ratio;
+		System.out.println(UI_SCALE);
+		UI_SCALE = 700.0f / (Gdx.graphics.getHeight() / DENSITY);
 		mCamera.setToOrtho(false, WIDTH, HEIGHT);
 		mCamera.translate(-WIDTH / 2.0f, -HEIGHT / 2.0f);
 		mCamera.update();
