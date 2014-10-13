@@ -26,6 +26,13 @@ public class Actor extends Poolable {
 		return mMainBody;
 	}
 
+	public Vector2 getPosition() {
+		if (mMainBody != null) {
+			return mMainBody.getPosition();
+		}
+		return null;
+	}
+
 	public void setTransformation(float x, float y, float angle) {
 		Vector2 position = Misc.v2r0;
 		position.set(x, y);

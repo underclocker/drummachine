@@ -23,7 +23,7 @@ public class Ball extends Actor {
 			mMainBody = body;
 
 			CircleShape circle = new CircleShape();
-			circle.setRadius(.25f);
+			circle.setRadius(.2f);
 
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.shape = circle;
@@ -44,7 +44,7 @@ public class Ball extends Actor {
 	@Override
 	public void update() {
 		if (mMainBody.isActive()) {
-			if (mMainBody.getPosition().len2() > 1000) {
+			if (mMainBody.getPosition().len2() > 100000.0f) {
 				Game.get().getLevel().destroyActor(this);
 			}
 		}

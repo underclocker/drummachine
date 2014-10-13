@@ -3,11 +3,12 @@ package com.pwnscone.drummachine.ui;
 import com.pwnscone.drummachine.actors.Actor;
 
 public class InputManager {
-	public enum ControlStates {
-		NONE, PAN, ZOOM, SELECT
+
+	public enum EditMode {
+		NONE, ROTATE, TRANSLATE
 	}
 
-	public static ControlStates STATE = ControlStates.NONE;
+	public static EditMode EDIT = EditMode.NONE;
 
 	private static Actor mSelectedActor;
 

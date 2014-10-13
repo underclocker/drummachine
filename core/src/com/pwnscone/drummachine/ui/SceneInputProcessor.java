@@ -6,11 +6,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.pwnscone.drummachine.Game;
-import com.pwnscone.drummachine.ui.InputManager.ControlStates;
 
 public class SceneInputProcessor implements InputProcessor {
 	private float mScrollSpeed = 0.5f;
-	private float mDecaySpeed = 0.8f;
+	private float mDecaySpeed = 0.75f;
 	private float mMaxZoom = 5.0f;
 	private float mMinZoom = 0.2f;
 	private OrthographicCamera mCamera;
@@ -157,7 +156,9 @@ public class SceneInputProcessor implements InputProcessor {
 	}
 
 	public void update() {
-		if (InputManager.STATE == ControlStates.SELECT) {
+		if (InputManager.EDIT != InputManager.EditMode.NONE) {
+			mZoomVelocity = 0.0f;
+			mVelocity.set(Vector2.Zero);
 		} else if (mZeroDown ^ mOneDown) {
 			Vector3 position;
 			Vector3 downPosition;
@@ -210,7 +211,7 @@ public class SceneInputProcessor implements InputProcessor {
 			mCamera.zoom = mMinZoom;
 		}
 		mCamera.update();
-		if (mZeroDown && mOneDown) {
+		if (mZeroDown && mOneDown && InputManager.EDIT == InputManager.EditMode.NONE) {
 			float cachedPinchX = mPinchPosition.x;
 			float cachedPinchY = mPinchPosition.y;
 			mPinchPosition.set(mZeroScreenPosition).add(mOneScreenPosition).scl(0.5f);

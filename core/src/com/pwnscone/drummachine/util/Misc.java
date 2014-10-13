@@ -11,6 +11,7 @@ public class Misc {
 	public static Vector2 v2r1 = new Vector2();
 
 	public static Vector3 v3r0 = new Vector3();
+	public static Vector3 v3r1 = new Vector3();
 
 	private static float[] randoms;
 	private static int randIndex;

@@ -34,9 +34,10 @@ public class Level {
 	}
 
 	public void create() {
-		createActor(Spawner.class);
-		Spawner spawner2 = (Spawner) createActor(Spawner.class);
-		spawner2.setTransformation(0.05f, -10.0f, (float) Math.PI);
+		Spawner spawner = (Spawner) createActor(Spawner.class);
+		spawner.setTransformation(-2.0f, -5.0f, 3.025f);
+		spawner = (Spawner) createActor(Spawner.class);
+		spawner.setTransformation(2.0f, -5.0f, -3.025f);
 	}
 
 	public void update() {

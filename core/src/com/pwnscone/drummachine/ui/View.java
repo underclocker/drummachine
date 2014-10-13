@@ -3,10 +3,14 @@ package com.pwnscone.drummachine.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pwnscone.drummachine.Game;
+import com.pwnscone.drummachine.actors.Actor;
+import com.pwnscone.drummachine.util.Misc;
 
 public class View {
 	public static float WIDTH = 9.0f;
@@ -19,12 +23,19 @@ public class View {
 	private SpriteBatch mSpriteBatch;
 	private Box2DDebugRenderer mDebugRenderer;
 
+	private Texture mTransformOverlay;
+
 	public View() {
 		mCamera = new OrthographicCamera();
 		mSpriteBatch = new SpriteBatch();
 		mDebugRenderer = new Box2DDebugRenderer();
+
 		DENSITY = Gdx.graphics.getDensity();
 		resetCamera();
+	}
+
+	public void create() {
+		mTransformOverlay = Game.get().getAssetManager().get("transformOverlay.png", Texture.class);
 	}
 
 	public void update() {
@@ -36,7 +47,19 @@ public class View {
 			mDebugRenderer.render(world, mCamera.combined);
 		}
 
+		mSpriteBatch.setProjectionMatrix(mCamera.combined);
 		mSpriteBatch.begin();
+
+		Actor actor = InputManager.getSelectedActor();
+		if (actor != null) {
+			Vector3 position = Misc.v3r0;
+			position.set(actor.getPosition().x, actor.getPosition().y, 0.0f);
+			float scale = 8f * (mCamera.zoom);
+			float offset = .5f * scale;
+			mSpriteBatch.draw(mTransformOverlay, position.x - offset, position.y - offset, scale,
+					scale);
+		}
+
 		mSpriteBatch.end();
 	}
 
