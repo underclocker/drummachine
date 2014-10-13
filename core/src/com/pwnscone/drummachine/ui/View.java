@@ -1,6 +1,7 @@
 package com.pwnscone.drummachine.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,7 +24,8 @@ public class View {
 	private SpriteBatch mSpriteBatch;
 	private Box2DDebugRenderer mDebugRenderer;
 
-	private Texture mTransformOverlay;
+	private Texture mTranslateOverlay;
+	private Texture mRotateOverlay;
 
 	public View() {
 		mCamera = new OrthographicCamera();
@@ -35,7 +37,9 @@ public class View {
 	}
 
 	public void create() {
-		mTransformOverlay = Game.get().getAssetManager().get("transformOverlay.png", Texture.class);
+		AssetManager assetManager = Game.get().getAssetManager();
+		mTranslateOverlay = assetManager.get("translateOverlay.png", Texture.class);
+		mRotateOverlay = assetManager.get("rotateOverlay.png", Texture.class);
 	}
 
 	public void update() {
@@ -56,8 +60,12 @@ public class View {
 			position.set(actor.getPosition().x, actor.getPosition().y, 0.0f);
 			float scale = 8f * (mCamera.zoom);
 			float offset = .5f * scale;
-			mSpriteBatch.draw(mTransformOverlay, position.x - offset, position.y - offset, scale,
+			float rotation = actor.getBody().getAngle() * Misc.RAD_TO_DEG;
+			mSpriteBatch.draw(mTranslateOverlay, position.x - offset, position.y - offset, scale,
 					scale);
+			mSpriteBatch.draw(mRotateOverlay, position.x - offset, position.y - offset, offset,
+					offset, scale, scale, 1.0f, 1.0f, rotation, 0, 0, mRotateOverlay.getWidth(),
+					mRotateOverlay.getHeight(), false, false);
 		}
 
 		mSpriteBatch.end();

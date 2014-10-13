@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.utils.Array;
 import com.pwnscone.drummachine.Game;
 
 public class AssetLoader {
@@ -14,10 +15,16 @@ public class AssetLoader {
 		param.minFilter = TextureFilter.Linear;
 		param.genMipMaps = true;
 
-		am.load("transformOverlay.png", Texture.class, param);
+		am.load("translateOverlay.png", Texture.class, param);
+		am.load("rotateOverlay.png", Texture.class, param);
 
 		am.finishLoading();
-		am.get("transformOverlay.png", Texture.class).setFilter(TextureFilter.MipMapLinearLinear,
-				TextureFilter.MipMapLinearLinear);
+
+		Array<Texture> textures = new Array<Texture>(100);
+		am.getAll(Texture.class, textures);
+		for (int i = 0; i < textures.size; i++) {
+			textures.get(i).setFilter(TextureFilter.MipMapLinearLinear,
+					TextureFilter.MipMapLinearLinear);
+		}
 	}
 }
