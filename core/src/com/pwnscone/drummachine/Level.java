@@ -12,19 +12,19 @@ import com.pwnscone.drummachine.util.Pool;
 
 public class Level {
 	private World mWorld;
+	private PhysicsContactListener mPhysicsContactListener;
 	private HashMap<Class, Pool<?>> mActorPoolMap;
 	private ArrayList<Pool<?>> mActorPoolArrayList;
 	private ArrayList<Actor> mDestroyQueue;
 	private int mFramesPerBeat;
 	private int mFrame = 0;
-	private float mWidth;
-	private float mHeight;
 
 	public Level() {
 		mFramesPerBeat = 64;
-		mWidth = 100f;
-		mHeight = 100f;
 		mWorld = new World(new Vector2(0.0f, -4.9f), true);
+		mPhysicsContactListener = new PhysicsContactListener();
+		mWorld.setContactListener(mPhysicsContactListener);
+
 		mDestroyQueue = new ArrayList<Actor>(128);
 		mActorPoolMap = new HashMap<Class, Pool<?>>();
 		mActorPoolMap.put(Ball.class, new Pool<Ball>(Ball.class));
@@ -35,13 +35,15 @@ public class Level {
 
 	public void create() {
 		Spawner spawner = (Spawner) createActor(Spawner.class);
-		spawner.setTransformation(-2.0f, -5.0f, 3.025f);
+		spawner.setTransformation(-1.25f, -5.0f, 3.025f);
 		spawner = (Spawner) createActor(Spawner.class);
-		spawner.setTransformation(2.0f, -5.0f, -3.025f);
+		spawner.setTransformation(1.25f, -5.0f, -3.025f);
 	}
 
 	public void update() {
-		mWorld.step(1.0f / 60.0f, 8, 3);
+		synchronized (Game.get().getSynth()) {
+			mWorld.step(1.0f / 60.0f, 8, 3);
+		}
 
 		float listSize = mActorPoolArrayList.size();
 		for (int i = 0; i < listSize; i++) {

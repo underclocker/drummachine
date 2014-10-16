@@ -7,13 +7,14 @@ import com.pwnscone.drummachine.util.Poolable;
 
 public class Actor extends Poolable {
 	protected Body mMainBody;
+	protected boolean mCollided = false;
 
 	public void create() {
 
 	}
 
 	public void update() {
-
+		mCollided = false;
 	}
 
 	public void destroy() {
@@ -39,5 +40,9 @@ public class Actor extends Poolable {
 		if (mMainBody != null) {
 			mMainBody.setTransform(position, angle);
 		}
+	}
+
+	public void collide() {
+
 	}
 }

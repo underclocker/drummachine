@@ -9,6 +9,7 @@ import com.pwnscone.drummachine.ui.ActorInputProcessor;
 import com.pwnscone.drummachine.ui.AssetLoader;
 import com.pwnscone.drummachine.ui.SceneInputProcessor;
 import com.pwnscone.drummachine.ui.View;
+import com.pwnscone.drummachine.util.Starter;
 
 public class Game extends ApplicationAdapter {
 	private Level mCurrentLevel;
@@ -17,8 +18,12 @@ public class Game extends ApplicationAdapter {
 	private ActorInputProcessor mActorInputProcessor;
 	private InputMultiplexer mInputMultiplexer;
 	private AssetManager mAssetManager;
+	private Synth mSynth;
 
 	public static boolean MOBILE;
+	public static Starter STARTER;
+	public static boolean RUNNING = true;
+
 	private static Game game;
 
 	public static Game get() {
@@ -30,6 +35,8 @@ public class Game extends ApplicationAdapter {
 		game = this;
 		MOBILE = Gdx.app.getType() == ApplicationType.Android
 				|| Gdx.app.getType() == ApplicationType.iOS;
+
+		mSynth = new Synth();
 
 		mAssetManager = new AssetManager();
 		AssetLoader.loadAssets();
@@ -48,6 +55,20 @@ public class Game extends ApplicationAdapter {
 		mActorInputProcessor.create();
 		mSceneInputProcessor.create();
 		mCurrentLevel.create();
+
+		if (STARTER != null) {
+			STARTER.startProcess();
+		}
+	}
+
+	@Override
+	public void pause() {
+		RUNNING = false;
+	}
+
+	@Override
+	public void resume() {
+		RUNNING = true;
 	}
 
 	@Override
@@ -56,6 +77,7 @@ public class Game extends ApplicationAdapter {
 		mView.update();
 		mActorInputProcessor.update();
 		mSceneInputProcessor.update();
+		mSynth.update();
 	}
 
 	public Level getLevel() {
@@ -68,6 +90,10 @@ public class Game extends ApplicationAdapter {
 
 	public AssetManager getAssetManager() {
 		return mAssetManager;
+	}
+
+	public Synth getSynth() {
+		return mSynth;
 	}
 
 	@Override

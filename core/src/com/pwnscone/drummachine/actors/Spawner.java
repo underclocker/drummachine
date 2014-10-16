@@ -83,6 +83,7 @@ public class Spawner extends Actor {
 
 	@Override
 	public void update() {
+		super.update();
 		if (mLevel.getFrame() == 0) {
 			Ball ball = (Ball) mLevel.createActor(Ball.class);
 			Vector2 offset = Misc.v2r0;
@@ -96,5 +97,13 @@ public class Spawner extends Actor {
 			offset.scl(mSpeed);
 			ball.mMainBody.setLinearVelocity(offset);
 		}
+	}
+
+	@Override
+	public void collide() {
+		if (mCollided) {
+			return;
+		}
+		mCollided = true;
 	}
 }

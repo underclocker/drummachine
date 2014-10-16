@@ -153,7 +153,6 @@ public class ActorInputProcessor implements InputProcessor {
 				angle -= Misc.TAU * (1 + laps);
 			} else if (angle < -Math.PI) {
 				int laps = (int) (-angle / Misc.TAU - .5f);
-
 				angle += Misc.TAU * (1 + laps);
 			}
 			body.setAngularVelocity(angle * 20.0f);

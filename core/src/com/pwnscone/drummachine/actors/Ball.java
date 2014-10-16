@@ -5,7 +5,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pwnscone.drummachine.Game;
@@ -21,6 +20,7 @@ public class Ball extends Actor {
 			bodyDef.bullet = true;
 			Body body = world.createBody(bodyDef);
 			mMainBody = body;
+			mMainBody.setUserData(this);
 
 			CircleShape circle = new CircleShape();
 			circle.setRadius(.2f);
@@ -31,8 +31,7 @@ public class Ball extends Actor {
 			fixtureDef.friction = 0.4f;
 			fixtureDef.restitution = 0.95f;
 
-			Fixture fixture = body.createFixture(fixtureDef);
-			fixture = body.createFixture(fixtureDef);
+			body.createFixture(fixtureDef);
 			circle.dispose();
 		} else {
 			mMainBody.setActive(true);
@@ -43,10 +42,20 @@ public class Ball extends Actor {
 
 	@Override
 	public void update() {
+		super.update();
 		if (mMainBody.isActive()) {
 			if (mMainBody.getPosition().len2() > 100000.0f) {
 				Game.get().getLevel().destroyActor(this);
 			}
 		}
+	}
+
+	@Override
+	public void collide() {
+		if (mCollided) {
+			return;
+		}
+		mCollided = true;
+		Game.get().getSynth().hiHat();
 	}
 }

@@ -1,5 +1,6 @@
 package com.pwnscone.drummachine.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,5 +27,15 @@ public class AssetLoader {
 			textures.get(i).setFilter(TextureFilter.MipMapLinearLinear,
 					TextureFilter.MipMapLinearLinear);
 		}
+	}
+
+	public static short[] loadSound(String file) {
+		byte[] bytes = Gdx.files.internal(file).readBytes();
+		int length = bytes.length / 2;
+		short[] shorts = new short[length];
+		for (int i = 0; i < length; i++) {
+			shorts[i] = (short) ((bytes[i * 2] & 0xff) | (bytes[i * 2 + 1] << 8));
+		}
+		return shorts;
 	}
 }

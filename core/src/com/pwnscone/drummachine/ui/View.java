@@ -76,7 +76,6 @@ public class View {
 	public void resetCamera() {
 		float ratio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
 		WIDTH = HEIGHT * ratio;
-		System.out.println(UI_SCALE);
 		UI_SCALE = 700.0f / (Gdx.graphics.getHeight() / DENSITY);
 		mCamera.setToOrtho(false, WIDTH, HEIGHT);
 		mCamera.translate(-WIDTH / 2.0f, -HEIGHT / 2.0f);
