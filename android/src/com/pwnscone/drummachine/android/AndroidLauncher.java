@@ -47,14 +47,14 @@ public class AndroidLauncher extends AndroidApplication implements Starter {
 					if (Game.RUNNING) {
 						synchronized (synth) {
 							for (int i = 0; i < bufferSize; i++) {
-								int id = (synth.index + i) % synth.bufferSamples;
+								int id = (synth.mIndex + i) % synth.mBufferSamples;
 								samples[i] = (short) Math.min(32767, Math.max(-32768,
-										synth.track[id]));
-								synth.track[id] = 0;
+										synth.mTrack[id]));
+								synth.mTrack[id] = 0;
 							}
-							synth.aheadIndex -= bufferSize;
-							synth.index += bufferSize;
-							synth.index = synth.index % synth.bufferSamples;
+							synth.mAheadIndex -= bufferSize;
+							synth.mIndex += bufferSize;
+							synth.mIndex = synth.mIndex % synth.mBufferSamples;
 						}
 						audioTrack.write(samples, 0, bufferSize);
 					} else {

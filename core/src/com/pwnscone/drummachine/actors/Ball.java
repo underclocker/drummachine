@@ -56,6 +56,6 @@ public class Ball extends Actor {
 			return;
 		}
 		mCollided = true;
-		Game.get().getSynth().hiHat();
+		// Game.get().getSynth().hiHat();
 	}
 }

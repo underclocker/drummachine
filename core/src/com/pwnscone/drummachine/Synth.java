@@ -9,34 +9,55 @@ public class Synth {
 	private static float BUFFER_TIME = .05f;
 	private static final int BUFFER_LENGTH = 10;
 
-	public final int bufferSamples;
-	public int track[];
-	public int index;
-	public int aheadIndex;
+	public final int mBufferSamples;
+	public int mTrack[];
+	public int mIndex;
+	public int mAheadIndex;
 
-	private int targetAheadIndex;
+	private int mTargetAheadIndex;
 
-	private short[] hiHat;
+	private short[] mHiHatClosed;
+	private short[] mHiHatOpen;
+	private short[] mSnare;
+	private short[] mKick;
 
 	public Synth() {
-		bufferSamples = SAMPLING_RATE * BUFFER_LENGTH;
+		mBufferSamples = SAMPLING_RATE * BUFFER_LENGTH;
 
-		targetAheadIndex = (int) (SAMPLING_RATE * BUFFER_TIME);
-		aheadIndex = targetAheadIndex;
-		track = new int[bufferSamples];
-		hiHat = AssetLoader.loadSound("hiHat.raw");
-
+		mTargetAheadIndex = (int) (SAMPLING_RATE * BUFFER_TIME);
+		mAheadIndex = mTargetAheadIndex;
+		mTrack = new int[mBufferSamples];
+		mHiHatClosed = AssetLoader.loadSound("hiHat.raw");
+		mHiHatOpen = AssetLoader.loadSound("hiHatOpen.raw");
+		mSnare = AssetLoader.loadSound("snare.raw");
+		mKick = AssetLoader.loadSound("kick.raw");
 	}
 
 	public void update() {
-		aheadIndex += SAMPLING_RATE * Gdx.graphics.getDeltaTime()
-				* (1.0f + (targetAheadIndex - aheadIndex) / (float) targetAheadIndex);
+		mAheadIndex += SAMPLING_RATE * Gdx.graphics.getDeltaTime()
+				* (1.0f + (mTargetAheadIndex - mAheadIndex) / (float) mTargetAheadIndex);
 	}
 
-	public void hiHat() {
-		int combinedIndex = index + aheadIndex;
-		for (int i = 0; i < hiHat.length; i++) {
-			track[(i + combinedIndex) % bufferSamples] += hiHat[i];
+	public void playClip(short[] clip) {
+		int combinedIndex = mIndex + mAheadIndex;
+		for (int i = 0; i < clip.length; i++) {
+			mTrack[(i + combinedIndex) % mBufferSamples] += clip[i];
 		}
+	}
+
+	public void hiHatClosed() {
+		playClip(mHiHatClosed);
+	}
+
+	public void hiHatOpen() {
+		playClip(mHiHatOpen);
+	}
+
+	public void snare() {
+		playClip(mSnare);
+	}
+
+	public void kick() {
+		playClip(mKick);
 	}
 }
