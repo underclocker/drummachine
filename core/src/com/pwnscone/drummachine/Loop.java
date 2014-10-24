@@ -2,6 +2,8 @@ package com.pwnscone.drummachine;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.Color;
+
 public class Loop {
 	private int mStepSize;
 	private int mStep;
@@ -35,10 +37,10 @@ public class Loop {
 		mSwingDirection = 1;
 		mSoundEnabled = true;
 
-		mHiHatClosed = new Track(Drum.HI_HAT_CLOSED, steps);
-		mHiHatOpen = new Track(Drum.HI_HAT_OPEN, steps);
-		mSnare = new Track(Drum.SNARE, steps);
-		mKick = new Track(Drum.KICK, steps);
+		mHiHatClosed = new Track(Drum.HI_HAT_CLOSED, steps, Color.RED);
+		mHiHatOpen = new Track(Drum.HI_HAT_OPEN, steps, Color.GREEN);
+		mSnare = new Track(Drum.SNARE, steps, Color.BLUE);
+		mKick = new Track(Drum.KICK, steps, Color.ORANGE);
 
 		mUsedTracks = new ArrayList<Track>();
 	}
