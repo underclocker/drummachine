@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.pwnscone.drummachine.Loop.Drum;
 import com.pwnscone.drummachine.actors.Actor;
 import com.pwnscone.drummachine.actors.Ball;
+import com.pwnscone.drummachine.actors.Snare;
 import com.pwnscone.drummachine.actors.Spawner;
 import com.pwnscone.drummachine.util.Pool;
 
@@ -31,6 +31,7 @@ public class Level {
 		mActorPoolMap = new HashMap<Class, Pool<?>>();
 		mActorPoolMap.put(Ball.class, new Pool<Ball>(Ball.class));
 		mActorPoolMap.put(Spawner.class, new Pool<Spawner>(Spawner.class));
+		mActorPoolMap.put(Snare.class, new Pool<Snare>(Snare.class));
 		mActorPoolArrayList = new ArrayList<Pool<?>>();
 		mActorPoolArrayList.addAll(mActorPoolMap.values());
 	}
@@ -38,32 +39,43 @@ public class Level {
 	public void create() {
 		Spawner spawner = (Spawner) createActor(Spawner.class);
 		spawner.setTransformation(-1.25f, -5.0f, 3.025f);
-		spawner = (Spawner) createActor(Spawner.class);
-		spawner.setTransformation(1.25f, -5.0f, -3.025f);
+
+		Snare snare = (Snare) createActor(Snare.class);
+		snare.setTransformation(-4.0f, 4.0f, 0.0f);
+
+		snare = (Snare) createActor(Snare.class);
+		snare.setTransformation(-2.0f, 4.0f, 0.0f);
+
+		snare = (Snare) createActor(Snare.class);
+		snare.setTransformation(0.0f, 4.0f, 0.0f);
+
+		snare = (Snare) createActor(Snare.class);
+		snare.setTransformation(2.0f, 4.0f, 0.0f);
+
+		snare = (Snare) createActor(Snare.class);
+		snare.setTransformation(4.0f, 4.0f, 0.0f);
 
 		mLoop = new Loop(8, 16, 1);
 
-		mLoop.addNote(Drum.HI_HAT_CLOSED, 0);
-		mLoop.addNote(Drum.HI_HAT_CLOSED, 2);
-		mLoop.addNote(Drum.HI_HAT_CLOSED, 4);
-		mLoop.addNote(Drum.HI_HAT_CLOSED, 6);
-		mLoop.addNote(Drum.HI_HAT_CLOSED, 8);
-		mLoop.addNote(Drum.HI_HAT_CLOSED, 10);
-		mLoop.addNote(Drum.HI_HAT_CLOSED, 12);
-		mLoop.addNote(Drum.HI_HAT_CLOSED, 14);
+		mLoop.addHiHatClosed(0);
+		mLoop.addHiHatClosed(2);
+		mLoop.addHiHatClosed(4);
+		mLoop.addHiHatClosed(6);
+		mLoop.addHiHatClosed(8);
+		mLoop.addHiHatClosed(10);
+		mLoop.addHiHatClosed(12);
+		mLoop.addHiHatClosed(14);
 
-		mLoop.addNote(Drum.KICK, 0);
-		mLoop.addNote(Drum.KICK, 2);
-		mLoop.addNote(Drum.SNARE, 4);
+		mLoop.addSnare(4);
+		mLoop.addSnare(7);
+		mLoop.addSnare(9);
+		mLoop.addSnare(12);
+		mLoop.addSnare(15);
 
-		mLoop.addNote(Drum.SNARE, 7);
-
-		mLoop.addNote(Drum.SNARE, 9);
-		mLoop.addNote(Drum.KICK, 10);
-		mLoop.addNote(Drum.KICK, 11);
-		mLoop.addNote(Drum.SNARE, 12);
-
-		mLoop.addNote(Drum.SNARE, 15);
+		mLoop.addKick(0);
+		mLoop.addKick(2);
+		mLoop.addKick(10);
+		mLoop.addKick(11);
 
 		Game.get().getView().setLevel(this);
 	}
@@ -92,9 +104,6 @@ public class Level {
 		}
 
 		mFrame++;
-		if (mFrame >= mFramesPerBeat) {
-			mFrame = 0;
-		}
 	}
 
 	public Actor createActor(Class classType) {
@@ -110,10 +119,6 @@ public class Level {
 
 	public World getWorld() {
 		return mWorld;
-	}
-
-	public int getFramesPerBeat() {
-		return mFramesPerBeat;
 	}
 
 	public int getFrame() {

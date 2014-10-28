@@ -1,16 +1,21 @@
 package com.pwnscone.drummachine;
 
 import com.badlogic.gdx.graphics.Color;
-import com.pwnscone.drummachine.Loop.Drum;
 
 public class Track {
-	public Drum mDrum;
+	public Instrument mInstrument;
 	public boolean[] mNotes;
 	public Color mColor;
 
-	public Track(Drum drum, int steps, Color color) {
-		mDrum = drum;
+	public Track(Instrument instrument, int steps, Color color) {
+		mInstrument = instrument;
 		mNotes = new boolean[steps];
 		mColor = color;
+	}
+
+	public void playNoteAt(int step) {
+		if (mNotes[step]) {
+			mInstrument.play();
+		}
 	}
 }

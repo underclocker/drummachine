@@ -23,6 +23,7 @@ public class Game extends ApplicationAdapter {
 	public static boolean MOBILE;
 	public static Starter STARTER;
 	public static boolean RUNNING = true;
+	public static float FRAME_RATE = 60.0f;
 
 	private static Game game;
 

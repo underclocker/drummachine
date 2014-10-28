@@ -1,12 +1,12 @@
 package com.pwnscone.drummachine;
 
 import com.badlogic.gdx.Gdx;
-import com.pwnscone.drummachine.ui.AssetLoader;
 
 public class Synth {
 	public static final int SAMPLING_RATE = 44100;
+	public static final float BUFFER_TIME = .05f;
+	public static final int HISTORY_LENGTH = 64;
 
-	private static float BUFFER_TIME = .05f;
 	private static final int BUFFER_LENGTH = 10;
 
 	public final int mBufferSamples;
@@ -16,10 +16,10 @@ public class Synth {
 
 	private int mTargetAheadIndex;
 
-	private short[] mHiHatClosed;
-	private short[] mHiHatOpen;
-	private short[] mSnare;
-	private short[] mKick;
+	private Instrument mHiHatClosed;
+	private Instrument mHiHatOpen;
+	private Instrument mSnare;
+	private Instrument mKick;
 
 	public Synth() {
 		mBufferSamples = SAMPLING_RATE * BUFFER_LENGTH;
@@ -27,10 +27,11 @@ public class Synth {
 		mTargetAheadIndex = (int) (SAMPLING_RATE * BUFFER_TIME);
 		mAheadIndex = mTargetAheadIndex;
 		mTrack = new int[mBufferSamples];
-		mHiHatClosed = AssetLoader.loadSound("hiHat.raw");
-		mHiHatOpen = AssetLoader.loadSound("hiHatOpen.raw");
-		mSnare = AssetLoader.loadSound("snare.raw");
-		mKick = AssetLoader.loadSound("kick.raw");
+
+		mHiHatClosed = new Instrument("hiHat.raw");
+		mHiHatOpen = new Instrument("hiHatOpen.raw");
+		mSnare = new Instrument("snare.raw");
+		mKick = new Instrument("kick.raw");
 	}
 
 	public void update() {
@@ -46,18 +47,34 @@ public class Synth {
 	}
 
 	public void hiHatClosed() {
-		playClip(mHiHatClosed);
+		mHiHatClosed.play();
 	}
 
 	public void hiHatOpen() {
-		playClip(mHiHatOpen);
+		mHiHatOpen.play();
 	}
 
 	public void snare() {
-		playClip(mSnare);
+		mSnare.play();
 	}
 
 	public void kick() {
-		playClip(mKick);
+		mKick.play();
+	}
+
+	public Instrument getHiHatClosed() {
+		return mHiHatClosed;
+	}
+
+	public Instrument getHiHatOpen() {
+		return mHiHatOpen;
+	}
+
+	public Instrument getSnare() {
+		return mSnare;
+	}
+
+	public Instrument getKick() {
+		return mKick;
 	}
 }

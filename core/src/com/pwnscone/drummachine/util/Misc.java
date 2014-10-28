@@ -1,5 +1,6 @@
 package com.pwnscone.drummachine.util;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
@@ -13,6 +14,8 @@ public class Misc {
 
 	public static Vector3 v3r0 = new Vector3();
 	public static Vector3 v3r1 = new Vector3();
+
+	public static Color cr0 = new Color();
 
 	private static float[] randoms;
 	private static int randIndex;

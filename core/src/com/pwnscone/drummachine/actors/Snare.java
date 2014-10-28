@@ -1,6 +1,5 @@
 package com.pwnscone.drummachine.actors;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -9,45 +8,37 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pwnscone.drummachine.Game;
+import com.pwnscone.drummachine.Level;
 
-public class Ball extends Actor {
+public class Snare extends Actor {
 
 	@Override
 	public void create() {
 		if (mMainBody == null) {
-			World world = Game.get().getLevel().getWorld();
+			Level level = Game.get().getLevel();
+			World world = level.getWorld();
 			BodyDef bodyDef = new BodyDef();
-			bodyDef.type = BodyType.DynamicBody;
-			bodyDef.bullet = true;
-			Body body = world.createBody(bodyDef);
-			mMainBody = body;
-			mMainBody.setUserData(this);
-
-			CircleShape circle = new CircleShape();
-			circle.setRadius(.2f);
+			bodyDef.type = BodyType.KinematicBody;
+			Body mainBody = world.createBody(bodyDef);
+			mMainBody = mainBody;
+			mainBody.setUserData(this);
 
 			FixtureDef fixtureDef = new FixtureDef();
-			fixtureDef.shape = circle;
 			fixtureDef.density = 0.5f;
-			fixtureDef.friction = 0.4f;
+			fixtureDef.friction = 0.0f;
 			fixtureDef.restitution = 0.95f;
 
-			body.createFixture(fixtureDef);
-			circle.dispose();
+			CircleShape circleShape = new CircleShape();
+			circleShape.setRadius(.75f);
+			fixtureDef.shape = circleShape;
+			mainBody.createFixture(fixtureDef);
+
+			fixtureDef.isSensor = true;
+			mainBody.createFixture(fixtureDef);
+
+			circleShape.dispose();
 		} else {
 			mMainBody.setActive(true);
-		}
-		mMainBody.setLinearVelocity(Vector2.Zero);
-		mMainBody.setAngularVelocity(0.0f);
-	}
-
-	@Override
-	public void update() {
-		super.update();
-		if (mMainBody.isActive()) {
-			if (mMainBody.getPosition().len2() > 100000.0f) {
-				Game.get().getLevel().destroyActor(this);
-			}
 		}
 	}
 
@@ -57,6 +48,6 @@ public class Ball extends Actor {
 			return;
 		}
 		mCollided = true;
-		// Game.get().getSynth().hiHatClosed();
+		Game.get().getSynth().snare();
 	}
 }

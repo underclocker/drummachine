@@ -2,6 +2,7 @@ package com.pwnscone.drummachine.actors;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.pwnscone.drummachine.util.Misc;
 import com.pwnscone.drummachine.util.Poolable;
 
@@ -42,7 +43,7 @@ public class Actor extends Poolable {
 		}
 	}
 
-	public void collide() {
+	public void collide(Fixture otherFixture) {
 
 	}
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -14,6 +15,8 @@ import com.pwnscone.drummachine.util.Misc;
 public class Spawner extends Actor {
 	private Level mLevel;
 	private float mSpeed = 32.0f;
+	private int mSpawnTimer = 0;
+	private int mSpawnRate = 64;
 
 	@Override
 	public void create() {
@@ -79,12 +82,14 @@ public class Spawner extends Actor {
 		} else {
 			mMainBody.setActive(true);
 		}
+		mSpawnTimer = Game.get().getLevel().getFrame() % mSpawnRate;
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		if (mLevel.getFrame() == 0) {
+		if (mSpawnTimer == 0) {
+			mSpawnTimer = mSpawnRate;
 			Ball ball = (Ball) mLevel.createActor(Ball.class);
 			Vector2 offset = Misc.v2r0;
 			offset.set(0.0f, -.25f);
@@ -97,11 +102,12 @@ public class Spawner extends Actor {
 			offset.scl(mSpeed);
 			ball.mMainBody.setLinearVelocity(offset);
 		}
+		mSpawnTimer--;
 	}
 
 	@Override
-	public void collide() {
-		if (mCollided) {
+	public void collide(Fixture otherFixture) {
+		if (mCollided || otherFixture.isSensor()) {
 			return;
 		}
 		mCollided = true;
