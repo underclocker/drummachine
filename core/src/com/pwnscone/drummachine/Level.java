@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pwnscone.drummachine.actors.Actor;
 import com.pwnscone.drummachine.actors.Ball;
+import com.pwnscone.drummachine.actors.HiHatClosed;
+import com.pwnscone.drummachine.actors.Kick;
 import com.pwnscone.drummachine.actors.Snare;
 import com.pwnscone.drummachine.actors.Spawner;
 import com.pwnscone.drummachine.util.Pool;
@@ -32,6 +34,8 @@ public class Level {
 		mActorPoolMap.put(Ball.class, new Pool<Ball>(Ball.class));
 		mActorPoolMap.put(Spawner.class, new Pool<Spawner>(Spawner.class));
 		mActorPoolMap.put(Snare.class, new Pool<Snare>(Snare.class));
+		mActorPoolMap.put(Kick.class, new Pool<Kick>(Kick.class));
+		mActorPoolMap.put(HiHatClosed.class, new Pool<HiHatClosed>(HiHatClosed.class));
 		mActorPoolArrayList = new ArrayList<Pool<?>>();
 		mActorPoolArrayList.addAll(mActorPoolMap.values());
 	}
@@ -49,11 +53,26 @@ public class Level {
 		snare = (Snare) createActor(Snare.class);
 		snare.setTransformation(0.0f, 4.0f, 0.0f);
 
-		snare = (Snare) createActor(Snare.class);
-		snare.setTransformation(2.0f, 4.0f, 0.0f);
+		Kick kick = (Kick) createActor(Kick.class);
+		kick.setTransformation(-8.0f, 6.0f, 0.0f);
 
-		snare = (Snare) createActor(Snare.class);
-		snare.setTransformation(4.0f, 4.0f, 0.0f);
+		kick = (Kick) createActor(Kick.class);
+		kick.setTransformation(-4.0f, 6.0f, 0.0f);
+
+		kick = (Kick) createActor(Kick.class);
+		kick.setTransformation(0.0f, 6.0f, 0.0f);
+
+		HiHatClosed hiHatClosed = (HiHatClosed) createActor(HiHatClosed.class);
+		hiHatClosed.setTransformation(4.0f, 4.0f, 0.0f);
+
+		hiHatClosed = (HiHatClosed) createActor(HiHatClosed.class);
+		hiHatClosed.setTransformation(4.0f, 6.0f, 0.0f);
+
+		hiHatClosed = (HiHatClosed) createActor(HiHatClosed.class);
+		hiHatClosed.setTransformation(8.0f, 4.0f, 0.0f);
+
+		hiHatClosed = (HiHatClosed) createActor(HiHatClosed.class);
+		hiHatClosed.setTransformation(8.0f, 6.0f, 0.0f);
 
 		mLoop = new Loop(8, 16, 1);
 

@@ -138,7 +138,7 @@ public class ActorInputProcessor implements InputProcessor {
 			position.set(body.getPosition().x, body.getPosition().y, 0.0f);
 
 			Vector3 offset = Misc.v3r0;
-			offset.set(mPosition).add(mDownOffset).sub(position).scl(20f);
+			offset.set(mPosition).add(mDownOffset).sub(position).scl(10f);
 
 			body.setLinearVelocity(offset.x, offset.y);
 		} else if (InputManager.EDIT == InputManager.EditMode.ROTATE) {
@@ -155,7 +155,7 @@ public class ActorInputProcessor implements InputProcessor {
 				int laps = (int) (-angle / Misc.TAU - .5f);
 				angle += Misc.TAU * (1 + laps);
 			}
-			body.setAngularVelocity(angle * 20.0f);
+			body.setAngularVelocity(angle * 10.0f);
 		}
 	}
 }

@@ -3,14 +3,14 @@ package com.pwnscone.drummachine.actors;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pwnscone.drummachine.Game;
 import com.pwnscone.drummachine.Level;
 
-public class Snare extends Actor {
+public class HiHatClosed extends Actor {
 
 	@Override
 	public void create() {
@@ -26,17 +26,17 @@ public class Snare extends Actor {
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.density = 0.5f;
 			fixtureDef.friction = 0.0f;
-			fixtureDef.restitution = 0.9f;
+			fixtureDef.restitution = 0.95f;
 
-			CircleShape circleShape = new CircleShape();
-			circleShape.setRadius(.75f);
-			fixtureDef.shape = circleShape;
+			PolygonShape triangleShape = new PolygonShape();
+			triangleShape.set(new float[] { 0.0f, 0.5f, -1.5f, -0.5f, 1.5f, -0.5f });
+			fixtureDef.shape = triangleShape;
 			mainBody.createFixture(fixtureDef);
 
 			fixtureDef.isSensor = true;
 			mainBody.createFixture(fixtureDef);
 
-			circleShape.dispose();
+			triangleShape.dispose();
 		} else {
 			mMainBody.setActive(true);
 		}
@@ -48,6 +48,6 @@ public class Snare extends Actor {
 			return;
 		}
 		mCollided = true;
-		Game.get().getSynth().snare();
+		Game.get().getSynth().hiHatClosed();
 	}
 }

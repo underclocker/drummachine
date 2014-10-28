@@ -10,7 +10,7 @@ import com.pwnscone.drummachine.Game;
 public class SceneInputProcessor implements InputProcessor {
 	private float mScrollSpeed = 0.5f;
 	private float mDecaySpeed = 0.75f;
-	private float mMaxZoom = 5.0f;
+	private float mMaxZoom = 8.0f;
 	private float mMinZoom = 0.2f;
 	private OrthographicCamera mCamera;
 	private boolean mZeroDown;
