@@ -39,13 +39,11 @@ public class Track {
 			int iterations = 1 + tolerance * 2;
 			int swing = mLoop.getSwing();
 			int stepSize = mLoop.getStepSize();
-			System.out.println("Time " + time);
 			for (int i = 0; i < iterations; i++) {
 				int tick = (mExpandedNotes.length + stepSize * time - tolerance + i + swing
 						* (1 - 2 * (time % 2)))
 						% mExpandedNotes.length;
 				mExpandedNotes[tick] = time;
-				System.out.println(tick);
 			}
 		}
 	}

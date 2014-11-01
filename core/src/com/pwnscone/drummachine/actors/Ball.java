@@ -14,6 +14,7 @@ public class Ball extends Actor {
 
 	@Override
 	public void create() {
+		super.create();
 		if (mMainBody == null) {
 			World world = Game.get().getLevel().getWorld();
 			BodyDef bodyDef = new BodyDef();
@@ -53,6 +54,7 @@ public class Ball extends Actor {
 
 	@Override
 	public void collide(Fixture otherFixture) {
+		super.collide(otherFixture);
 		if (mCollided || otherFixture.isSensor()) {
 			return;
 		}

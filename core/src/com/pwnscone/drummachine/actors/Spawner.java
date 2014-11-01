@@ -20,6 +20,7 @@ public class Spawner extends Actor {
 
 	@Override
 	public void create() {
+		super.create();
 		if (mMainBody == null) {
 			mLevel = Game.get().getLevel();
 			World world = mLevel.getWorld();
@@ -107,7 +108,8 @@ public class Spawner extends Actor {
 
 	@Override
 	public void collide(Fixture otherFixture) {
-		if (mCollided || otherFixture.isSensor()) {
+		super.collide(otherFixture);
+		if (mCollided || otherFixture.isSensor() || isInCache(otherFixture)) {
 			return;
 		}
 		mCollided = true;

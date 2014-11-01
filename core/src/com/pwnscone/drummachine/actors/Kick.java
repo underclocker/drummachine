@@ -14,6 +14,7 @@ public class Kick extends Actor {
 
 	@Override
 	public void create() {
+		super.create();
 		if (mMainBody == null) {
 			Level level = Game.get().getLevel();
 			World world = level.getWorld();
@@ -44,7 +45,8 @@ public class Kick extends Actor {
 
 	@Override
 	public void collide(Fixture otherFixture) {
-		if (mCollided || otherFixture.isSensor()) {
+		super.collide(otherFixture);
+		if (mCollided || otherFixture.isSensor() || isInCache(otherFixture)) {
 			return;
 		}
 		mCollided = true;
