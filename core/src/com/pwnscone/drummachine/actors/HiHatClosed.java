@@ -26,7 +26,7 @@ public class HiHatClosed extends Actor {
 
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.density = 0.5f;
-			fixtureDef.friction = 0.0f;
+			fixtureDef.friction = 0.5f;
 			fixtureDef.restitution = 0.95f;
 
 			PolygonShape triangleShape = new PolygonShape();

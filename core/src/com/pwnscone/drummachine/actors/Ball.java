@@ -31,7 +31,7 @@ public class Ball extends Actor {
 			fixtureDef.shape = circle;
 			fixtureDef.density = 0.5f;
 			fixtureDef.friction = 0.4f;
-			fixtureDef.restitution = 0.95f;
+			fixtureDef.restitution = 0.85f;
 
 			body.createFixture(fixtureDef);
 			circle.dispose();

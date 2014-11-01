@@ -22,6 +22,8 @@ public class View {
 
 	public static float UI_SCALE = 1.0f;
 	public static float DENSITY;
+	public static float RATIO;
+	public static float INV_RATIO;
 
 	private static boolean RENDER_DEBUG = true;
 
@@ -49,6 +51,8 @@ public class View {
 		DENSITY = Gdx.graphics.getDensity();
 
 		resetCamera();
+		mCamera.position.set(0.0f, 0.0f, 0.0f);
+		mCamera.update();
 	}
 
 	public void create() {
@@ -94,12 +98,18 @@ public class View {
 	}
 
 	public void resetCamera() {
-		float ratio = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
-		WIDTH = HEIGHT * ratio;
+		RATIO = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
+		INV_RATIO = (float) (1.0f / (RATIO));
+		WIDTH = HEIGHT * RATIO;
+
+		Vector3 position = Misc.v3r0;
+		position.set(mCamera.position);
+
 		TOP = HEIGHT / WIDTH;
 		UI_SCALE = 700.0f / (Gdx.graphics.getHeight() / DENSITY);
+
 		mCamera.setToOrtho(false, WIDTH, HEIGHT);
-		mCamera.translate(-WIDTH / 2.0f, -HEIGHT / 2.0f);
+		mCamera.position.set(position);
 		mCamera.update();
 
 		mUICamera.setToOrtho(false, 1.0f, HEIGHT / WIDTH);

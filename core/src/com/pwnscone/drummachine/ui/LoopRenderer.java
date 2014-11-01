@@ -20,18 +20,20 @@ public class LoopRenderer {
 	private float mTotalHeight;
 
 	public LoopRenderer() {
-		mTotalHeight = .25f;
+		mTotalHeight = .125f;
 		mBackgroundColor = new Color(0.0f, 0.0f, 0.0f, 0.5f);
 	}
 
 	public void render() {
+
+		float height = mTotalHeight * View.INV_RATIO;
 
 		// Render Background
 		Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
 		Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
 		mShapeRenderer.begin(ShapeType.Filled);
 		mShapeRenderer.setColor(mBackgroundColor);
-		mShapeRenderer.rect(0, View.TOP - mTotalHeight, 1.0f, mTotalHeight);
+		mShapeRenderer.rect(0, View.TOP - height, 1.0f, height);
 		mShapeRenderer.end();
 		Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 
@@ -42,7 +44,7 @@ public class LoopRenderer {
 		// Render Desired Notes
 		int framesTotal = mLoop.getSteps() * mLoop.getStepSize();
 		float denominator = 1.0f / framesTotal;
-		float barHeight = mTotalHeight / size;
+		float barHeight = height / size;
 		float barWidth = (1.0f + 2.0f * mLoop.getTolerance()) * denominator;
 		float swing = mLoop.getSwing() * denominator;
 		for (int i = 0; i < size; i++) {
@@ -52,7 +54,7 @@ public class LoopRenderer {
 			float length = notes.length;
 			for (int j = 0; j < length; j++) {
 				if (notes[j]) {
-					float x = (j + 0.5f) / length;
+					float x = (j + 0.5f) / length + denominator * 0.5f;
 					x += (j % 2 == 0 ? swing : -swing);
 					float y = View.TOP - barHeight * i;
 					mShapeRenderer.setColor(noteStatus[j] > 0 ? track.mColor : track.mColorDark);
@@ -62,7 +64,6 @@ public class LoopRenderer {
 		}
 		// Cursor Position
 		float xPos = mLoop.getSummedSteps() * denominator + .5f / mLoop.getSteps() + swing;
-		// xPos -= Game.FRAME_RATE * Synth.BUFFER_TIME * denominator;
 		xPos -= Math.floor(xPos);
 
 		mShapeRenderer.end();
@@ -95,12 +96,12 @@ public class LoopRenderer {
 
 						mShapeRenderer.setColor(color.r, color.g, color.b, Math.min(Math.max(0.0f,
 								2.0f - 3.0f * measure), 1.0f));
-						mShapeRenderer.rect(x - 0.5f * denominator, y - barHeight, denominator,
-								barHeight);
+						mShapeRenderer.rect(x, y - barHeight, denominator, barHeight);
 						if (actor == selectedActor) {
 							mShapeRenderer.setColor(1.0f, 1.0f, 1.0f, Math.min(Math.max(0.0f,
 									2.0f - 3.0f * measure), 1.0f));
-							mShapeRenderer.circle(x, y - barHeight * 0.5f, denominator * 1.0f, 8);
+							mShapeRenderer.circle(x + 0.5f * denominator, y - barHeight * 0.5f,
+									View.RATIO < 1.0f ? denominator : denominator * 0.5f, 8);
 						}
 
 					}
@@ -110,8 +111,7 @@ public class LoopRenderer {
 
 		// Render Cursor
 		mShapeRenderer.setColor(Color.LIGHT_GRAY);
-		mShapeRenderer.rect(xPos - denominator * 0.5f, View.TOP - mTotalHeight, denominator,
-				mTotalHeight);
+		mShapeRenderer.rect(xPos, View.TOP - height, denominator, height);
 
 		mShapeRenderer.end();
 		Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
