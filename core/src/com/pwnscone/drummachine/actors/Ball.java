@@ -9,12 +9,22 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.pwnscone.drummachine.Game;
+import com.pwnscone.drummachine.util.Misc;
 
 public class Ball extends Actor {
+	private static int POS_HIST_SIZE = 30;
+	private static float EPSILON = 0.001f;
+
+	private float[] xPos;
+	private float[] yPos;
+	private int histIndex;
 
 	@Override
 	public void create() {
 		super.create();
+		xPos = new float[POS_HIST_SIZE];
+		yPos = new float[POS_HIST_SIZE];
+		histIndex = 0;
 		if (mMainBody == null) {
 			World world = Game.get().getLevel().getWorld();
 			BodyDef bodyDef = new BodyDef();
@@ -46,7 +56,22 @@ public class Ball extends Actor {
 	public void update() {
 		super.update();
 		if (mMainBody.isActive()) {
-			if (mMainBody.getPosition().len2() > 100000.0f) {
+			Vector2 pos = mMainBody.getPosition();
+			if (pos.len2() > 100000.0f) {
+				Game.get().getLevel().destroyActor(this);
+				return;
+			}
+			xPos[histIndex] = pos.x;
+			yPos[histIndex] = pos.y;
+			histIndex++;
+			if (histIndex == POS_HIST_SIZE) {
+				histIndex = 0;
+				Vector2 posCache = Misc.v2r0;
+				for (int i = 0; i < POS_HIST_SIZE; i++) {
+					if (pos.dst2(xPos[histIndex], yPos[histIndex]) > EPSILON) {
+						return;
+					}
+				}
 				Game.get().getLevel().destroyActor(this);
 			}
 		}
