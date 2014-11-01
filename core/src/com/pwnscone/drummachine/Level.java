@@ -100,6 +100,7 @@ public class Level {
 	}
 
 	public void update() {
+		mFrame++;
 		synchronized (Game.get().getSynth()) {
 			mWorld.step(1.0f / 60.0f, 8, 3);
 		}
@@ -121,8 +122,6 @@ public class Level {
 			Actor actor = mDestroyQueue.remove(0);
 			mActorPoolMap.get(actor.getClass()).remove(actor);
 		}
-
-		mFrame++;
 	}
 
 	public Actor createActor(Class classType) {

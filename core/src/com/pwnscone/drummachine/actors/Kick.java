@@ -48,6 +48,6 @@ public class Kick extends Actor {
 			return;
 		}
 		mCollided = true;
-		Game.get().getSynth().kick();
+		Game.get().getSynth().kick(this);
 	}
 }

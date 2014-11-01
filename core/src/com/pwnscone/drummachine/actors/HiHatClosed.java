@@ -48,6 +48,6 @@ public class HiHatClosed extends Actor {
 			return;
 		}
 		mCollided = true;
-		Game.get().getSynth().hiHatClosed();
+		Game.get().getSynth().hiHatClosed(this);
 	}
 }

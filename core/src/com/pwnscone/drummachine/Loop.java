@@ -29,7 +29,7 @@ public class Loop {
 	public Loop(int stepSize, int steps, int swing) {
 		mStep = 0;
 		mStepSize = stepSize;
-		mSubstep = 0;
+		mSubstep = -1;
 		mSteps = steps;
 		mSwing = swing;
 		mSummedSteps = 0;
@@ -39,15 +39,17 @@ public class Loop {
 
 		Synth synth = Game.get().getSynth();
 
-		mHiHatClosed = new Track(synth.getHiHatClosed(), steps, Color.RED);
-		mHiHatOpen = new Track(synth.getHiHatOpen(), steps, Color.GREEN);
-		mSnare = new Track(synth.getSnare(), steps, Color.BLUE);
-		mKick = new Track(synth.getKick(), steps, Color.ORANGE);
+		mHiHatClosed = new Track(synth.getHiHatClosed(), this, Color.RED);
+		mHiHatOpen = new Track(synth.getHiHatOpen(), this, Color.GREEN);
+		mSnare = new Track(synth.getSnare(), this, Color.BLUE);
+		mKick = new Track(synth.getKick(), this, Color.ORANGE);
 
 		mUsedTracks = new ArrayList<Track>();
 	}
 
 	public void update() {
+		mSubstep++;
+		mSummedSteps++;
 		if (mSubstep == mStepSize - mSwingDirection * mSwing) {
 			mSubstep = 0;
 			mStep++;
@@ -57,19 +59,23 @@ public class Loop {
 				mSummedSteps = 0;
 			}
 		}
-		if (mSubstep == 0 && mSoundEnabled) {
-			Synth synth = Game.get().getSynth();
+		if (mSubstep == 0) {
 			for (int i = 0; i < mUsedTracks.size(); i++) {
-				mUsedTracks.get(i).playNoteAt(mStep);
+				Track track = mUsedTracks.get(i);
+
+				if (track.mNoteStatus[mStep] > 0) {
+					track.mNoteStatus[mStep]--;
+				}
+				if (mSoundEnabled) {
+					track.playNoteAt(mStep);
+				}
 			}
 		}
-		mSubstep++;
-		mSummedSteps++;
 	}
 
 	private void addNote(int time, Track track) {
 		time %= mSteps;
-		track.mNotes[time] = true;
+		track.addNote(time);
 		if (!mUsedTracks.contains(track)) {
 			mUsedTracks.add(track);
 		}

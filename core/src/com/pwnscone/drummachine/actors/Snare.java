@@ -48,6 +48,6 @@ public class Snare extends Actor {
 			return;
 		}
 		mCollided = true;
-		Game.get().getSynth().snare();
+		Game.get().getSynth().snare(this);
 	}
 }

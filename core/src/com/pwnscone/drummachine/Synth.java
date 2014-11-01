@@ -1,6 +1,7 @@
 package com.pwnscone.drummachine;
 
 import com.badlogic.gdx.Gdx;
+import com.pwnscone.drummachine.actors.Actor;
 
 public class Synth {
 	public static final int SAMPLING_RATE = 44100;
@@ -46,20 +47,20 @@ public class Synth {
 		}
 	}
 
-	public void hiHatClosed() {
-		mHiHatClosed.play();
+	public void hiHatClosed(Actor actor) {
+		mHiHatClosed.play(actor);
 	}
 
-	public void hiHatOpen() {
-		mHiHatOpen.play();
+	public void hiHatOpen(Actor actor) {
+		mHiHatOpen.play(actor);
 	}
 
-	public void snare() {
-		mSnare.play();
+	public void snare(Actor actor) {
+		mSnare.play(actor);
 	}
 
-	public void kick() {
-		mKick.play();
+	public void kick(Actor actor) {
+		mKick.play(actor);
 	}
 
 	public Instrument getHiHatClosed() {
