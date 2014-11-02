@@ -106,6 +106,10 @@ public class Spawner extends Actor {
 		mSpawnTimer--;
 	}
 
+	public void setSpawnRate(int spawnrate) {
+		mSpawnRate = spawnrate;
+	}
+
 	@Override
 	public void collide(Fixture otherFixture) {
 		super.collide(otherFixture);
