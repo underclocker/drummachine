@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -87,6 +88,7 @@ public class View {
 			mSpriteBatch.end();
 			mSpriteBatch.begin();
 		}
+		mSpriteBatch.setColor(Color.WHITE);
 
 		Actor actor = InputManager.getSelectedActor();
 		if (actor != null) {

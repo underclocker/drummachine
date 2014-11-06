@@ -46,6 +46,8 @@ public class Snare extends Actor {
 			mTexture = Game.get().getAssetManager().get("snare.png", Texture.class);
 			mOffset = new Vector2(-0.75f, -0.75f);
 			mScale = .25f;
+
+			mGlowOnHit = true;
 		} else {
 			mMainBody.setActive(true);
 		}
@@ -58,6 +60,6 @@ public class Snare extends Actor {
 			return;
 		}
 		mCollided = true;
-		Game.get().getSynth().snare(this);
+		mOnTime = Game.get().getSynth().snare(this) ? 1.0f : 0.0f;
 	}
 }

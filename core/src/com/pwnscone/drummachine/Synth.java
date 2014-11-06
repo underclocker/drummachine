@@ -47,20 +47,20 @@ public class Synth {
 		}
 	}
 
-	public void hiHatClosed(Actor actor) {
-		mHiHatClosed.play(actor);
+	public boolean hiHatClosed(Actor actor) {
+		return mHiHatClosed.play(actor);
 	}
 
-	public void hiHatOpen(Actor actor) {
-		mHiHatOpen.play(actor);
+	public boolean hiHatOpen(Actor actor) {
+		return mHiHatOpen.play(actor);
 	}
 
-	public void snare(Actor actor) {
-		mSnare.play(actor);
+	public boolean snare(Actor actor) {
+		return mSnare.play(actor);
 	}
 
-	public void kick(Actor actor) {
-		mKick.play(actor);
+	public boolean kick(Actor actor) {
+		return mKick.play(actor);
 	}
 
 	public Instrument getHiHatClosed() {

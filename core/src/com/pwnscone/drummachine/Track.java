@@ -54,15 +54,17 @@ public class Track {
 		}
 	}
 
-	public void record(int time) {
+	public boolean record(int time) {
 		time %= (mLoop.getSteps() * mLoop.getStepSize());
 		int note = mExpandedNotes[time];
 		if (note > -1) {
 			mNoteStatus[note] = 2;
+			return true;
 		} else {
 			for (int i = 0; i < mNoteStatus.length; i++) {
 				mNoteStatus[i] = 0;
 			}
+			return false;
 		}
 	}
 }

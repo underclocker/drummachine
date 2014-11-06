@@ -46,6 +46,8 @@ public class Kick extends Actor {
 			mTexture = Game.get().getAssetManager().get("kick.png", Texture.class);
 			mOffset = new Vector2(-1.0f, -0.75f);
 			mScale = .25f;
+
+			mGlowOnHit = true;
 		} else {
 			mMainBody.setActive(true);
 		}
@@ -58,6 +60,6 @@ public class Kick extends Actor {
 			return;
 		}
 		mCollided = true;
-		Game.get().getSynth().kick(this);
+		mOnTime = Game.get().getSynth().kick(this) ? 1.0f : 0.0f;
 	}
 }

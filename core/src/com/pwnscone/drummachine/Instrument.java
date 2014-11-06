@@ -25,12 +25,14 @@ public class Instrument {
 		Game.get().getSynth().playClip(mSamples);
 	}
 
-	public void play(Actor actor) {
+	public boolean play(Actor actor) {
 		mActorHistory[mHistoryIndex % Synth.HISTORY_LENGTH] = actor;
+		boolean result = false;
 		if (mTrack != null) {
-			mTrack.record(Game.get().getLevel().getFrame());
+			result = mTrack.record(Game.get().getLevel().getFrame());
 		}
 		play();
+		return result;
 	}
 
 	public int[] getHistory() {

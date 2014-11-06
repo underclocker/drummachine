@@ -1,5 +1,6 @@
 package com.pwnscone.drummachine.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -24,13 +25,22 @@ public class Actor extends Poolable {
 	protected Vector2 mOffset;
 	protected float mScale;
 
+	protected boolean mGlowOnHit;
+	protected float mOnTime;
+	protected float mOnTimeDecay;
+	protected float mMinGlow;
+
 	public void create() {
 		mCollidedFixturesPrimary = new Fixture[FIXTURE_CACHE_SIZE];
 		mCollidedFixturesSecondary = new Fixture[FIXTURE_CACHE_SIZE];
 		mFixtureIndex = -1;
+		mOnTime = 0;
+		mOnTimeDecay = 0.8f;
+		mMinGlow = 0.3f;
 	}
 
 	public void update() {
+		mOnTime *= mOnTimeDecay;
 		mCollided = false;
 		Fixture[] cache = !mFixtureCacheToggle ? mCollidedFixturesPrimary
 				: mCollidedFixturesSecondary;
@@ -51,6 +61,13 @@ public class Actor extends Poolable {
 		float rot = getRotation();
 		pos.rotate(rot);
 		pos.add(getPosition());
+
+		if (mGlowOnHit) {
+			float brightness = mMinGlow + (1 - mMinGlow) * mOnTime;
+			spriteBatch.setColor(brightness, brightness, brightness, 1.0f);
+		} else {
+			spriteBatch.setColor(Color.WHITE);
+		}
 
 		spriteBatch.draw(mTexture, pos.x, pos.y, 0, 0, mTexture.getWidth() * View.SCREEN_SCALE,
 				mTexture.getHeight() * View.SCREEN_SCALE, mScale, mScale, getRotation(), 0, 0,

@@ -46,6 +46,8 @@ public class HiHatClosed extends Actor {
 			mTexture = Game.get().getAssetManager().get("hiHatClosed.png", Texture.class);
 			mOffset = new Vector2(-1.5f, -0.5f);
 			mScale = .25f;
+
+			mGlowOnHit = true;
 		} else {
 			mMainBody.setActive(true);
 		}
@@ -58,6 +60,6 @@ public class HiHatClosed extends Actor {
 			return;
 		}
 		mCollided = true;
-		Game.get().getSynth().hiHatClosed(this);
+		mOnTime = Game.get().getSynth().hiHatClosed(this) ? 1.0f : 0.0f;
 	}
 }
