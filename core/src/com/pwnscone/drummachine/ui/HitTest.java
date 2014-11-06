@@ -1,5 +1,6 @@
 package com.pwnscone.drummachine.ui;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
@@ -7,10 +8,15 @@ import com.pwnscone.drummachine.actors.Actor;
 
 public class HitTest implements QueryCallback {
 	private Fixture mFixture;
+	private Vector2 mPosition;
+
+	public HitTest() {
+		mPosition = new Vector2();
+	}
 
 	@Override
 	public boolean reportFixture(Fixture fixture) {
-		if (fixture.isSensor()) {
+		if (fixture.isSensor() && fixture.testPoint(mPosition)) {
 			mFixture = fixture;
 			return false;
 		}
@@ -18,8 +24,9 @@ public class HitTest implements QueryCallback {
 		return true;
 	}
 
-	public void reset() {
+	public void set(float x, float y) {
 		mFixture = null;
+		mPosition.set(x, y);
 	}
 
 	public Fixture getFixture() {

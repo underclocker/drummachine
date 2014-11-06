@@ -11,27 +11,27 @@ import com.pwnscone.drummachine.actors.Spawner;
 public class PopRockLevel extends Level {
 	public void create() {
 		Spawner spawner = (Spawner) createActor(Spawner.class);
-		spawner.setTransformation(-1.25f, -5.0f, 3.0f);
+		spawner.setTransformation(-1.25f, -5.0f, 2.5f);
 
 		Snare snare = (Snare) createActor(Snare.class);
-		snare.setTransformation(-4.0f, 4.0f, 0.0f);
+		snare.setTransformation(-3.0f, 2.0f, 0.0f);
 
 		Kick kick = (Kick) createActor(Kick.class);
-		kick.setTransformation(-8.0f, 6.0f, 0.0f);
+		kick.setTransformation(-3.0f, 4.0f, 0.0f);
 
 		HiHatClosed hiHatClosed = (HiHatClosed) createActor(HiHatClosed.class);
-		hiHatClosed.setTransformation(4.0f, 4.0f, 0.0f);
+		hiHatClosed.setTransformation(0.0f, 2.0f, 0.0f);
 
 		hiHatClosed = (HiHatClosed) createActor(HiHatClosed.class);
-		hiHatClosed.setTransformation(4.0f, 6.0f, 0.0f);
+		hiHatClosed.setTransformation(0.0f, 4.0f, 0.0f);
 
 		hiHatClosed = (HiHatClosed) createActor(HiHatClosed.class);
-		hiHatClosed.setTransformation(8.0f, 4.0f, 0.0f);
+		hiHatClosed.setTransformation(3.0f, 2.0f, 0.0f);
 
 		hiHatClosed = (HiHatClosed) createActor(HiHatClosed.class);
-		hiHatClosed.setTransformation(8.0f, 6.0f, 0.0f);
+		hiHatClosed.setTransformation(3.0f, 4.0f, 0.0f);
 
-		mLoop = new Loop(14, 8, 0);
+		mLoop = new Loop(16, 8, 0);
 
 		mLoop.addHiHatClosed(0);
 		mLoop.addHiHatClosed(1);

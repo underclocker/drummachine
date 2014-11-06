@@ -1,8 +1,11 @@
 package com.pwnscone.drummachine.actors;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.pwnscone.drummachine.ui.View;
 import com.pwnscone.drummachine.util.Misc;
 import com.pwnscone.drummachine.util.Poolable;
 
@@ -14,13 +17,17 @@ public class Actor extends Poolable {
 
 	protected Fixture[] mCollidedFixturesPrimary;
 	protected Fixture[] mCollidedFixturesSecondary;
-	protected int fixtureIndex;
+	protected int mFixtureIndex;
 	protected boolean mFixtureCacheToggle;
+
+	protected Texture mTexture;
+	protected Vector2 mOffset;
+	protected float mScale;
 
 	public void create() {
 		mCollidedFixturesPrimary = new Fixture[FIXTURE_CACHE_SIZE];
 		mCollidedFixturesSecondary = new Fixture[FIXTURE_CACHE_SIZE];
-		fixtureIndex = -1;
+		mFixtureIndex = -1;
 	}
 
 	public void update() {
@@ -30,8 +37,24 @@ public class Actor extends Poolable {
 		for (int i = 0; i < FIXTURE_CACHE_SIZE; i++) {
 			cache[i] = null;
 		}
-		fixtureIndex = -1;
+		mFixtureIndex = -1;
 		mFixtureCacheToggle = !mFixtureCacheToggle;
+	}
+
+	public void render(SpriteBatch spriteBatch) {
+		if (mTexture == null || !mMainBody.isActive()) {
+			return;
+		}
+
+		Vector2 pos = Misc.v2r0;
+		pos.set(mOffset);
+		float rot = getRotation();
+		pos.rotate(rot);
+		pos.add(getPosition());
+
+		spriteBatch.draw(mTexture, pos.x, pos.y, 0, 0, mTexture.getWidth() * View.SCREEN_SCALE,
+				mTexture.getHeight() * View.SCREEN_SCALE, mScale, mScale, getRotation(), 0, 0,
+				mTexture.getWidth(), mTexture.getHeight(), false, false);
 	}
 
 	public void destroy() {
@@ -49,6 +72,13 @@ public class Actor extends Poolable {
 			return mMainBody.getPosition();
 		}
 		return null;
+	}
+
+	public float getRotation() {
+		if (mMainBody != null) {
+			return mMainBody.getAngle() * Misc.RAD_TO_DEG;
+		}
+		return 0.0f;
 	}
 
 	public void setTransformation(float x, float y, float angle) {
@@ -71,10 +101,10 @@ public class Actor extends Poolable {
 	}
 
 	public void collide(Fixture otherFixture) {
-		if (++fixtureIndex < FIXTURE_CACHE_SIZE) {
+		if (++mFixtureIndex < FIXTURE_CACHE_SIZE) {
 			Fixture[] cache = mFixtureCacheToggle ? mCollidedFixturesPrimary
 					: mCollidedFixturesSecondary;
-			cache[fixtureIndex] = otherFixture;
+			cache[mFixtureIndex] = otherFixture;
 		}
 	}
 }

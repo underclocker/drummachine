@@ -1,5 +1,7 @@
 package com.pwnscone.drummachine.ui;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,6 +16,7 @@ import com.pwnscone.drummachine.Game;
 import com.pwnscone.drummachine.Level;
 import com.pwnscone.drummachine.actors.Actor;
 import com.pwnscone.drummachine.util.Misc;
+import com.pwnscone.drummachine.util.Pool;
 
 public class View {
 	public static float WIDTH = 9.0f;
@@ -21,11 +24,12 @@ public class View {
 	public static float TOP = HEIGHT / WIDTH;
 
 	public static float UI_SCALE = 1.0f;
+	public static float SCREEN_SCALE = 1.0f / 128.0f;
 	public static float DENSITY;
 	public static float RATIO;
 	public static float INV_RATIO;
 
-	private static boolean RENDER_DEBUG = true;
+	private static boolean RENDER_DEBUG = false;
 
 	private OrthographicCamera mCamera;
 	private OrthographicCamera mUICamera;
@@ -72,6 +76,18 @@ public class View {
 		mSpriteBatch.setProjectionMatrix(mCamera.combined);
 		mSpriteBatch.begin();
 
+		ArrayList<Pool<?>> actors = Game.get().getLevel().getActorPoolArrayList();
+		int listSize = actors.size();
+		for (int i = 0; i < listSize; i++) {
+			Pool<?> pool = actors.get(i);
+			int size = pool.size();
+			for (int j = 0; j < size; j++) {
+				((Actor) pool.get(j)).render(mSpriteBatch);
+			}
+			mSpriteBatch.end();
+			mSpriteBatch.begin();
+		}
+
 		Actor actor = InputManager.getSelectedActor();
 		if (actor != null) {
 			Vector3 position = Misc.v3r0;
@@ -106,7 +122,9 @@ public class View {
 		position.set(mCamera.position);
 
 		TOP = HEIGHT / WIDTH;
-		UI_SCALE = 700.0f / (Gdx.graphics.getHeight() / DENSITY);
+		UI_SCALE = 600.0f / (Gdx.graphics.getHeight() / DENSITY);
+
+		System.out.println(DENSITY);
 
 		mCamera.setToOrtho(false, WIDTH, HEIGHT);
 		mCamera.position.set(position);

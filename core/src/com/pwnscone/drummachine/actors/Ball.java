@@ -1,5 +1,6 @@
 package com.pwnscone.drummachine.actors;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -35,7 +36,7 @@ public class Ball extends Actor {
 			mMainBody.setUserData(this);
 
 			CircleShape circle = new CircleShape();
-			circle.setRadius(.2f);
+			circle.setRadius(.21875f);
 
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.shape = circle;
@@ -45,6 +46,12 @@ public class Ball extends Actor {
 
 			body.createFixture(fixtureDef);
 			circle.dispose();
+
+			// Graphics
+			mTexture = Game.get().getAssetManager().get("ball.png", Texture.class);
+			mOffset = new Vector2(-0.21875f, -0.21875f);
+			mScale = .5f;
+
 		} else {
 			mMainBody.setActive(true);
 		}

@@ -37,7 +37,11 @@ public class Level {
 		mActorPoolMap.put(Kick.class, new Pool<Kick>(Kick.class));
 		mActorPoolMap.put(HiHatClosed.class, new Pool<HiHatClosed>(HiHatClosed.class));
 		mActorPoolArrayList = new ArrayList<Pool<?>>();
-		mActorPoolArrayList.addAll(mActorPoolMap.values());
+		mActorPoolArrayList.add(mActorPoolMap.get(Ball.class));
+		mActorPoolArrayList.add(mActorPoolMap.get(Spawner.class));
+		mActorPoolArrayList.add(mActorPoolMap.get(Snare.class));
+		mActorPoolArrayList.add(mActorPoolMap.get(Kick.class));
+		mActorPoolArrayList.add(mActorPoolMap.get(HiHatClosed.class));
 		mLoop = new Loop();
 	}
 
@@ -50,7 +54,7 @@ public class Level {
 			mWorld.step(1.0f / 60.0f, 8, 3);
 		}
 
-		float listSize = mActorPoolArrayList.size();
+		int listSize = mActorPoolArrayList.size();
 		for (int i = 0; i < listSize; i++) {
 			Pool<?> pool = mActorPoolArrayList.get(i);
 			int size = pool.size();
@@ -91,4 +95,9 @@ public class Level {
 	public Loop getLoop() {
 		return mLoop;
 	}
+
+	public ArrayList<Pool<?>> getActorPoolArrayList() {
+		return mActorPoolArrayList;
+	}
+
 }

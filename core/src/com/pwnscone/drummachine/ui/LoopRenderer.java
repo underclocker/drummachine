@@ -63,7 +63,9 @@ public class LoopRenderer {
 			}
 		}
 		// Cursor Position
-		float xPos = mLoop.getSummedSteps() * denominator + .5f / mLoop.getSteps() + swing;
+		// TODO: Figure out why I have to add denominator to fix this off by
+		// one...
+		float xPos = (mLoop.getSummedSteps() + 1) * denominator + .5f / mLoop.getSteps();
 		xPos -= Math.floor(xPos);
 
 		mShapeRenderer.end();
@@ -95,22 +97,21 @@ public class LoopRenderer {
 						float y = View.TOP - barHeight * i;
 
 						mShapeRenderer.setColor(color.r, color.g, color.b, Math.min(Math.max(0.0f,
-								2.0f - 3.0f * measure), 1.0f));
+								1.0f - 1.3f * measure), 1.0f));
 						mShapeRenderer.rect(x, y - barHeight, denominator, barHeight);
+
 						if (actor == selectedActor) {
 							mShapeRenderer.setColor(1.0f, 1.0f, 1.0f, Math.min(Math.max(0.0f,
 									2.0f - 3.0f * measure), 1.0f));
-							mShapeRenderer.circle(x + 0.5f * denominator, y - barHeight * 0.5f,
-									View.RATIO < 1.0f ? denominator : denominator * 0.5f, 8);
+							mShapeRenderer.rect(x, y - barHeight, denominator, barHeight);
 						}
-
 					}
 				}
 			}
 		}
 
 		// Render Cursor
-		mShapeRenderer.setColor(Color.LIGHT_GRAY);
+		mShapeRenderer.setColor(Color.WHITE);
 		mShapeRenderer.rect(xPos, View.TOP - height, denominator, height);
 
 		mShapeRenderer.end();

@@ -97,7 +97,7 @@ public class ActorInputProcessor implements InputProcessor {
 				mPosition.set(screenX, screenY, 0.0f);
 				mCamera.unproject(mPosition);
 				World world = Game.get().getLevel().getWorld();
-				mHitTest.reset();
+				mHitTest.set(mPosition.x, mPosition.y);
 				world.QueryAABB(mHitTest, mPosition.x, mPosition.y, mPosition.x, mPosition.y);
 				Actor actor = mHitTest.getActor();
 				InputManager.setSelectedActor(actor);

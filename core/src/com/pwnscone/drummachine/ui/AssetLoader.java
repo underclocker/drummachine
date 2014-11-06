@@ -16,6 +16,11 @@ public class AssetLoader {
 		param.minFilter = TextureFilter.Linear;
 		param.genMipMaps = true;
 
+		am.load("spawner.png", Texture.class, param);
+		am.load("ball.png", Texture.class, param);
+		am.load("kick.png", Texture.class, param);
+		am.load("snare.png", Texture.class, param);
+		am.load("hiHatClosed.png", Texture.class, param);
 		am.load("translateOverlay.png", Texture.class, param);
 		am.load("rotateOverlay.png", Texture.class, param);
 

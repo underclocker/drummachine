@@ -1,5 +1,7 @@
 package com.pwnscone.drummachine.actors;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -38,6 +40,12 @@ public class HiHatClosed extends Actor {
 			mainBody.createFixture(fixtureDef);
 
 			triangleShape.dispose();
+
+			// Graphics
+
+			mTexture = Game.get().getAssetManager().get("hiHatClosed.png", Texture.class);
+			mOffset = new Vector2(-1.5f, -0.5f);
+			mScale = .25f;
 		} else {
 			mMainBody.setActive(true);
 		}
