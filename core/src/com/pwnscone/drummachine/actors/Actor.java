@@ -35,7 +35,7 @@ public class Actor extends Poolable {
 		mCollidedFixturesSecondary = new Fixture[FIXTURE_CACHE_SIZE];
 		mFixtureIndex = -1;
 		mOnTime = 0;
-		mOnTimeDecay = 0.8f;
+		mOnTimeDecay = 0.7f;
 		mMinGlow = 0.3f;
 	}
 
