@@ -19,13 +19,18 @@ public class Level {
 	private HashMap<Class, Pool<?>> mActorPoolMap;
 	private ArrayList<Pool<?>> mActorPoolArrayList;
 	private ArrayList<Actor> mDestroyQueue;
+	private Pool<Particle> mParticles;
 	private int mFramesPerBeat;
 	private int mFrame = 0;
 	protected Loop mLoop;
+	protected Vector2 mBounds;
+	protected Vector2 mGravity;
 
 	public Level() {
 		mFramesPerBeat = 64;
-		mWorld = new World(new Vector2(0.0f, -4.9f), true);
+		mGravity = new Vector2(0.0f, -4.9f);
+		mWorld = new World(mGravity, true);
+		mGravity.scl(1.0f / Game.FRAME_RATE);
 		mPhysicsContactListener = new PhysicsContactListener();
 		mWorld.setContactListener(mPhysicsContactListener);
 
@@ -37,12 +42,16 @@ public class Level {
 		mActorPoolMap.put(Kick.class, new Pool<Kick>(Kick.class));
 		mActorPoolMap.put(HiHatClosed.class, new Pool<HiHatClosed>(HiHatClosed.class));
 		mActorPoolArrayList = new ArrayList<Pool<?>>();
-		mActorPoolArrayList.add(mActorPoolMap.get(Ball.class));
-		mActorPoolArrayList.add(mActorPoolMap.get(Spawner.class));
 		mActorPoolArrayList.add(mActorPoolMap.get(Snare.class));
 		mActorPoolArrayList.add(mActorPoolMap.get(Kick.class));
 		mActorPoolArrayList.add(mActorPoolMap.get(HiHatClosed.class));
+		mActorPoolArrayList.add(mActorPoolMap.get(Ball.class));
+		mActorPoolArrayList.add(mActorPoolMap.get(Spawner.class));
+
+		mParticles = new Pool<Particle>(Particle.class);
+
 		mLoop = new Loop();
+		mBounds = new Vector2(25.0f, 25.0f);
 	}
 
 	public void create() {
@@ -57,10 +66,15 @@ public class Level {
 		int listSize = mActorPoolArrayList.size();
 		for (int i = 0; i < listSize; i++) {
 			Pool<?> pool = mActorPoolArrayList.get(i);
-			int size = pool.size();
+			int size = pool.fill;
 			for (int j = 0; j < size; j++) {
 				((Actor) pool.get(j)).update();
 			}
+		}
+
+		listSize = mParticles.fill;
+		for (int i = 0; i < listSize; i++) {
+			mParticles.get(i).update();
 		}
 
 		if (mLoop != null) {
@@ -84,8 +98,22 @@ public class Level {
 		mDestroyQueue.add(actor);
 	}
 
+	public Particle createParticle() {
+		Particle particle = mParticles.add();
+		particle.create();
+		return particle;
+	}
+
+	public void destroyParticle(Particle particle) {
+		mParticles.remove(particle);
+	}
+
 	public World getWorld() {
 		return mWorld;
+	}
+
+	public Vector2 getGravity() {
+		return mGravity;
 	}
 
 	public int getFrame() {
@@ -100,4 +128,7 @@ public class Level {
 		return mActorPoolArrayList;
 	}
 
+	public Pool<Particle> getParticles() {
+		return mParticles;
+	}
 }

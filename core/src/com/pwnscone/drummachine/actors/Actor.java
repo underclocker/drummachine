@@ -69,8 +69,10 @@ public class Actor extends Poolable {
 			spriteBatch.setColor(Color.WHITE);
 		}
 
-		spriteBatch.draw(mTexture, pos.x, pos.y, 0, 0, mTexture.getWidth() * View.SCREEN_SCALE,
-				mTexture.getHeight() * View.SCREEN_SCALE, mScale, mScale, getRotation(), 0, 0,
+		float scale = mScale;
+		float width = mTexture.getWidth() * View.SCREEN_SCALE;
+		float height = mTexture.getHeight() * View.SCREEN_SCALE;
+		spriteBatch.draw(mTexture, pos.x, pos.y, 0, 0, width, height, scale, scale, rot, 0, 0,
 				mTexture.getWidth(), mTexture.getHeight(), false, false);
 	}
 
