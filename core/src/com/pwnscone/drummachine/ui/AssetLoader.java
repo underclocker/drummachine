@@ -14,13 +14,16 @@ public class AssetLoader {
 
 		TextureParameter param = new TextureParameter();
 		param.minFilter = TextureFilter.Linear;
-		param.genMipMaps = true;
+		param.genMipMaps = false;
 
 		am.load("spawner.png", Texture.class, param);
 		am.load("ball.png", Texture.class, param);
 		am.load("kick.png", Texture.class, param);
+		am.load("kickWhite.png", Texture.class, param);
 		am.load("snare.png", Texture.class, param);
+		am.load("snareWhite.png", Texture.class, param);
 		am.load("hiHatClosed.png", Texture.class, param);
+		am.load("hiHatClosedWhite.png", Texture.class, param);
 		am.load("translateOverlay.png", Texture.class, param);
 		am.load("rotateOverlay.png", Texture.class, param);
 		am.load("particle.png", Texture.class, param);
@@ -30,8 +33,8 @@ public class AssetLoader {
 		Array<Texture> textures = new Array<Texture>(100);
 		am.getAll(Texture.class, textures);
 		for (int i = 0; i < textures.size; i++) {
-			textures.get(i).setFilter(TextureFilter.MipMapLinearLinear,
-					TextureFilter.MipMapLinearLinear);
+			// textures.get(i).setFilter(TextureFilter.MipMapLinearLinear,
+			// TextureFilter.MipMapLinearLinear);
 		}
 	}
 

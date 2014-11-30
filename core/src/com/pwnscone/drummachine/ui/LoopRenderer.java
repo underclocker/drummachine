@@ -102,7 +102,7 @@ public class LoopRenderer {
 
 						if (actor == selectedActor) {
 							mShapeRenderer.setColor(1.0f, 1.0f, 1.0f, Math.min(Math.max(0.0f,
-									2.0f - 3.0f * measure), 1.0f));
+									2.2f - 3.0f * measure), 1.0f));
 							mShapeRenderer.rect(x, y - barHeight, denominator, barHeight);
 						}
 					}

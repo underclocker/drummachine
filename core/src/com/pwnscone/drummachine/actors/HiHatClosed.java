@@ -1,5 +1,6 @@
 package com.pwnscone.drummachine.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -44,8 +45,10 @@ public class HiHatClosed extends Actor {
 			// Graphics
 
 			mTexture = Game.get().getAssetManager().get("hiHatClosed.png", Texture.class);
+			mHitTexture = Game.get().getAssetManager().get("hiHatClosedWhite.png", Texture.class);
 			mOffset = new Vector2(-1.5f, -0.5f);
 			mScale = .25f;
+			mColor = Color.RED;
 
 			mGlowOnHit = true;
 		} else {

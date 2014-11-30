@@ -19,6 +19,10 @@ public class AndroidLauncher extends AndroidApplication implements Starter {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.r = 8;
+		config.g = 8;
+		config.b = 8;
+		config.a = 8;
 		initialize(new Game(), config);
 		Game.STARTER = this;
 	}

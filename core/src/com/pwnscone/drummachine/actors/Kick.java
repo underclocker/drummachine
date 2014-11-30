@@ -1,5 +1,6 @@
 package com.pwnscone.drummachine.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -44,8 +45,10 @@ public class Kick extends Actor {
 			// Graphics
 
 			mTexture = Game.get().getAssetManager().get("kick.png", Texture.class);
+			mHitTexture = Game.get().getAssetManager().get("kickWhite.png", Texture.class);
 			mOffset = new Vector2(-1.0f, -0.75f);
 			mScale = .25f;
+			mColor = new Color(1.0f, 0.8f, 0.0f, 1.0f);
 
 			mGlowOnHit = true;
 		} else {

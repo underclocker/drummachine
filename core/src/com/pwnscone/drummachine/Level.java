@@ -72,9 +72,13 @@ public class Level {
 			}
 		}
 
-		listSize = mParticles.fill;
-		for (int i = 0; i < listSize; i++) {
-			mParticles.get(i).update();
+		for (int i = 0; i < mParticles.fill; i++) {
+			Particle particle = mParticles.get(i);
+			particle.update();
+			if (particle.mLife <= 0) {
+				destroyParticle(particle);
+				i--;
+			}
 		}
 
 		if (mLoop != null) {
@@ -118,6 +122,10 @@ public class Level {
 
 	public int getFrame() {
 		return mFrame;
+	}
+
+	public int getFramesPerBeat() {
+		return mFramesPerBeat;
 	}
 
 	public Loop getLoop() {

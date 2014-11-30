@@ -22,6 +22,7 @@ public class Actor extends Poolable {
 	protected boolean mFixtureCacheToggle;
 
 	protected Texture mTexture;
+	protected Texture mHitTexture;
 	protected Vector2 mOffset;
 	protected float mScale;
 
@@ -29,14 +30,21 @@ public class Actor extends Poolable {
 	protected float mOnTime;
 	protected float mOnTimeDecay;
 	protected float mMinGlow;
+	protected Color mColor;
+
+	protected Vector2 mContactPoint;
+
+	public Actor() {
+		mContactPoint = new Vector2();
+	}
 
 	public void create() {
 		mCollidedFixturesPrimary = new Fixture[FIXTURE_CACHE_SIZE];
 		mCollidedFixturesSecondary = new Fixture[FIXTURE_CACHE_SIZE];
 		mFixtureIndex = -1;
 		mOnTime = 0;
-		mOnTimeDecay = 0.7f;
-		mMinGlow = 0.3f;
+		mOnTimeDecay = 0.75f;
+		mMinGlow = 0.425f;
 	}
 
 	public void update() {
@@ -74,6 +82,11 @@ public class Actor extends Poolable {
 		float height = mTexture.getHeight() * View.SCREEN_SCALE;
 		spriteBatch.draw(mTexture, pos.x, pos.y, 0, 0, width, height, scale, scale, rot, 0, 0,
 				mTexture.getWidth(), mTexture.getHeight(), false, false);
+		if (mHitTexture != null) {
+			spriteBatch.setColor(1.0f, 1.0f, 1.0f, mOnTime);
+			spriteBatch.draw(mHitTexture, pos.x, pos.y, 0, 0, width, height, scale, scale, rot, 0,
+					0, mHitTexture.getWidth(), mHitTexture.getHeight(), false, false);
+		}
 	}
 
 	public void destroy() {
@@ -125,5 +138,17 @@ public class Actor extends Poolable {
 					: mCollidedFixturesSecondary;
 			cache[mFixtureIndex] = otherFixture;
 		}
+	}
+
+	public void setContactPoint(Vector2 point) {
+		mContactPoint.set(point);
+	}
+
+	public Color getColor() {
+		return mColor;
+	}
+
+	public float getOnTime() {
+		return mOnTime;
 	}
 }

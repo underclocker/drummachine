@@ -1,5 +1,6 @@
 package com.pwnscone.drummachine.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -86,6 +87,7 @@ public class Spawner extends Actor {
 			mTexture = Game.get().getAssetManager().get("spawner.png", Texture.class);
 			mOffset = new Vector2(-0.5f, -0.75f);
 			mScale = .25f;
+			mColor = Color.GRAY;
 
 		} else {
 			mMainBody.setActive(true);

@@ -25,7 +25,7 @@ public class Track {
 			mExpandedNotes[i] = -1;
 		}
 		mColor = color;
-		mColorDark = color.cpy().lerp(Color.BLACK, 0.6f);
+		mColorDark = color.cpy().lerp(Color.BLACK, 0.5f);
 		mColorLight = color.cpy().lerp(Color.WHITE, 0.7f);
 		mTotalNotes = 0;
 	}

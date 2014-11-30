@@ -1,5 +1,6 @@
 package com.pwnscone.drummachine.actors;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -44,8 +45,10 @@ public class Snare extends Actor {
 			// Graphics
 
 			mTexture = Game.get().getAssetManager().get("snare.png", Texture.class);
+			mHitTexture = Game.get().getAssetManager().get("snareWhite.png", Texture.class);
 			mOffset = new Vector2(-0.75f, -0.75f);
 			mScale = .25f;
+			mColor = Color.BLUE;
 
 			mGlowOnHit = true;
 		} else {
