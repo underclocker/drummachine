@@ -75,7 +75,7 @@ public class Ball extends Actor {
 		super.update();
 		if (mMainBody.isActive()) {
 			Vector2 pos = mMainBody.getPosition();
-			if (pos.len2() > 100000.0f) {
+			if (pos.len2() > 4000000.0f) {
 				Game.get().getLevel().destroyActor(this);
 				return;
 			}

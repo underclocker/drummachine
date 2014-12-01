@@ -42,6 +42,7 @@ public class View {
 
 	private Texture mTranslateOverlay;
 	private Texture mRotateOverlay;
+	private Level mLevel;
 	private World mWorld;
 
 	/*
@@ -56,11 +57,6 @@ public class View {
 		mDebugRenderer = new Box2DDebugRenderer();
 		mShapeRenderer = new ShapeRenderer();
 		mLoopRenderer = new LoopRenderer();
-
-		/*
-		 * mBackgroundColor = new Color(0.0f, 0.0f, 0.0f, 0.025f);
-		 * mBackgroundTextureRegion = new TextureRegion();
-		 */
 
 		mLoopRenderer.setShapeRenderer(mShapeRenderer);
 
@@ -85,21 +81,9 @@ public class View {
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		/*
-		 * Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
-		 * Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA,
-		 * Gdx.gl.GL_ONE_MINUS_SRC_ALPHA); mBackgroundBuffer.begin();
-		 * mShapeRenderer.begin(ShapeType.Filled);
-		 * mShapeRenderer.setColor(mBackgroundColor); mShapeRenderer.rect(0, 0,
-		 * 1.0f, TOP); mShapeRenderer.end(); mBackgroundBuffer.end();
-		 * Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
-		 */
-
 		if (RENDER_DEBUG) {
 			mDebugRenderer.render(mWorld, mCamera.combined);
 		}
-
-		// mBackgroundBuffer.begin();
 
 		Pool<Particle> particles = Game.get().getLevel().getParticles();
 		int listSize = particles.fill;
@@ -120,16 +104,8 @@ public class View {
 			}
 			mSpriteBatch.end();
 		}
-		// mBackgroundBuffer.end();
 
 		mSpriteBatch.setColor(Color.WHITE);
-
-		/*
-		 * mSpriteBatch.setProjectionMatrix(mUICamera.combined);
-		 * mSpriteBatch.begin(); mSpriteBatch.draw(mBackgroundTextureRegion, 0,
-		 * 0, 1, TOP); mSpriteBatch.end();
-		 * mSpriteBatch.setProjectionMatrix(mCamera.combined);
-		 */
 
 		mSpriteBatch.begin();
 		Actor actor = InputManager.getSelectedActor();
@@ -154,19 +130,10 @@ public class View {
 	public void setLevel(Level level) {
 		mWorld = level.getWorld();
 		mLoopRenderer.setLoop(level.getLoop());
+		mLevel = level;
 	}
 
 	public void resetCamera() {
-		/*
-		 * if (mBackgroundBuffer != null) { mBackgroundBuffer.dispose(); }
-		 * mBackgroundBuffer = new FrameBuffer(Pixmap.Format.RGBA8888,
-		 * Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
-		 * mBackgroundTextureRegion
-		 * .setTexture(mBackgroundBuffer.getColorBufferTexture());
-		 * mBackgroundTextureRegion.setRegion(0, 0, Gdx.graphics.getWidth(),
-		 * Gdx.graphics.getHeight()); mBackgroundTextureRegion.flip(false,
-		 * true);
-		 */
 
 		RATIO = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
 		INV_RATIO = (float) (1.0f / (RATIO));

@@ -10,7 +10,8 @@ import com.pwnscone.drummachine.Game;
 public class SceneInputProcessor implements InputProcessor {
 	private float mScrollSpeed = 0.5f;
 	private float mDecaySpeed = 0.75f;
-	private float mMaxZoom = 8.0f;
+	private float mBoundSpeed = 0.25f;
+	private float mMaxZoom = 20.0f;
 	private float mMinZoom = 0.2f;
 	private OrthographicCamera mCamera;
 	private boolean mZeroDown;
@@ -178,6 +179,7 @@ public class SceneInputProcessor implements InputProcessor {
 			mVelocity.set((downPosition.x - position.x) * mScrollSpeed,
 					(downPosition.y - position.y) * mScrollSpeed);
 			mCamera.translate(mVelocity);
+			boundCamera();
 		} else if (mZeroDown && mOneDown) {
 			mZeroScreenPosition.set(Gdx.input.getX(0), Gdx.input.getY(0), 0.0f);
 			mOneScreenPosition.set(Gdx.input.getX(1), Gdx.input.getY(1), 0.0f);
@@ -202,6 +204,7 @@ public class SceneInputProcessor implements InputProcessor {
 		} else {
 			mVelocity.scl(mDecaySpeed);
 			mCamera.translate(mVelocity);
+			boundCamera();
 		}
 		mZoomVelocity *= mDecaySpeed;
 		mCamera.zoom += mZoomVelocity;
@@ -219,7 +222,36 @@ public class SceneInputProcessor implements InputProcessor {
 			cachedPinchX -= mPinchPosition.x;
 			cachedPinchY -= mPinchPosition.y;
 			mCamera.translate(cachedPinchX + mVelocity.x, cachedPinchY + mVelocity.y);
+			boundCamera();
 			mCamera.update();
 		}
+	}
+
+	public void boundCamera() {
+		float halfWidth = mCamera.viewportWidth * 0.5f * mCamera.zoom;
+		float halfHeight = mCamera.viewportHeight * 0.5f * mCamera.zoom;
+		Vector2 bounds = Game.get().getLevel().getBounds();
+
+		boolean left = mCamera.position.x < -bounds.x + halfWidth;
+		boolean right = mCamera.position.x > bounds.x - halfWidth;
+		boolean up = mCamera.position.y < -bounds.y + halfHeight;
+		boolean down = mCamera.position.y > bounds.y - halfHeight;
+
+		float xDelta = 0;
+		float yDelta = 0;
+		if (left) {
+			xDelta = Math.min(0, -bounds.x + halfWidth) - mCamera.position.x;
+		}
+		if (right) {
+			xDelta = Math.max(0, bounds.x - halfWidth) - mCamera.position.x;
+		}
+		if (up) {
+			yDelta = Math.min(0, -bounds.y + halfHeight) - mCamera.position.y;
+		}
+		if (down) {
+			yDelta = Math.max(0, bounds.y - halfHeight) - mCamera.position.y;
+		}
+		mCamera.position.x += mBoundSpeed * xDelta;
+		mCamera.position.y += mBoundSpeed * yDelta;
 	}
 }

@@ -12,6 +12,9 @@ import com.pwnscone.drummachine.ui.InputManager.EditMode;
 import com.pwnscone.drummachine.util.Misc;
 
 public class ActorInputProcessor implements InputProcessor {
+	private static float mBoundSpeed = .125f;
+	private static float mBoundBuffer = 1.0f;
+
 	private OrthographicCamera mCamera;
 	private boolean mDown;
 	private Vector3 mPosition;
@@ -140,6 +143,15 @@ public class ActorInputProcessor implements InputProcessor {
 			Vector3 offset = Misc.v3r0;
 			offset.set(mPosition).add(mDownOffset).sub(position).scl(10f);
 
+			Vector2 bounds = Game.get().getLevel().getBounds();
+			if (Math.abs(position.x + offset.x * mBoundSpeed) > bounds.x - mBoundBuffer) {
+				offset.x = (bounds.x - mBoundBuffer - Math.abs(position.x)) / mBoundSpeed
+						* (offset.x > 0 ? 1.0f : -1.0f);
+			}
+			if (Math.abs(position.y + offset.y * mBoundSpeed) > bounds.y - mBoundBuffer) {
+				offset.y = (bounds.y - mBoundBuffer - Math.abs(position.y)) / mBoundSpeed
+						* (offset.y > 0 ? 1.0f : -1.0f);
+			}
 			body.setLinearVelocity(offset.x, offset.y);
 		} else if (InputManager.EDIT == InputManager.EditMode.ROTATE) {
 			Actor selectedActor = InputManager.getSelectedActor();
