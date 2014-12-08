@@ -24,7 +24,7 @@ public class Particle extends Poolable {
 	protected float mLife;
 	protected Color mColor;
 
-	private static int LIFE = 120;
+	private static int LIFE = 60;
 
 	public void create() {
 		if (mPosition == null) {

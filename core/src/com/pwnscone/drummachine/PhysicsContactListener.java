@@ -1,6 +1,5 @@
 package com.pwnscone.drummachine;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -16,11 +15,6 @@ public class PhysicsContactListener implements ContactListener {
 		Fixture fixtureB = contact.getFixtureB();
 		Actor actorA = (Actor) fixtureA.getBody().getUserData();
 		Actor actorB = (Actor) fixtureB.getBody().getUserData();
-		if (contact.getWorldManifold().getNumberOfContactPoints() > 0) {
-			Vector2 contactPoint = contact.getWorldManifold().getPoints()[0];
-			actorA.setContactPoint(contactPoint);
-			actorB.setContactPoint(contactPoint);
-		}
 		actorA.collide(fixtureB);
 		actorB.collide(fixtureA);
 	}

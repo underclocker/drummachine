@@ -42,6 +42,7 @@ public class View {
 
 	private Texture mTranslateOverlay;
 	private Texture mRotateOverlay;
+	private Texture mLockOverlay;
 	private Level mLevel;
 	private World mWorld;
 
@@ -71,6 +72,7 @@ public class View {
 		AssetManager assetManager = Game.get().getAssetManager();
 		mTranslateOverlay = assetManager.get("translateOverlay.png", Texture.class);
 		mRotateOverlay = assetManager.get("rotateOverlay.png", Texture.class);
+		mLockOverlay = assetManager.get("lockOverlay.png", Texture.class);
 	}
 
 	public void update() {
@@ -115,11 +117,23 @@ public class View {
 			float scale = 8f * (mCamera.zoom) * UI_SCALE;
 			float offset = .5f * scale;
 			float rotation = actor.getBody().getAngle() * Misc.RAD_TO_DEG;
-			mSpriteBatch.draw(mTranslateOverlay, position.x - offset, position.y - offset, scale,
-					scale);
-			mSpriteBatch.draw(mRotateOverlay, position.x - offset, position.y - offset, offset,
-					offset, scale, scale, 1.0f, 1.0f, rotation, 0, 0, mRotateOverlay.getWidth(),
-					mRotateOverlay.getHeight(), false, false);
+			if (actor.isLocked()) {
+				scale *= 0.15f;
+				scale = (1.0f + scale) / 2.0f;
+				offset = 0.5f * scale;
+				mSpriteBatch.draw(mLockOverlay, position.x - offset, position.y - offset, scale,
+						scale);
+			} else {
+				if (!actor.isTranslationLocked()) {
+					mSpriteBatch.draw(mTranslateOverlay, position.x - offset, position.y - offset,
+							scale, scale);
+				}
+				if (!actor.isRotationLocked()) {
+					mSpriteBatch.draw(mRotateOverlay, position.x - offset, position.y - offset,
+							offset, offset, scale, scale, 1.0f, 1.0f, rotation, 0, 0,
+							mRotateOverlay.getWidth(), mRotateOverlay.getHeight(), false, false);
+				}
+			}
 		}
 
 		mSpriteBatch.end();

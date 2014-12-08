@@ -30,7 +30,7 @@ public class Kick extends Actor {
 			FixtureDef fixtureDef = new FixtureDef();
 			fixtureDef.density = 0.5f;
 			fixtureDef.friction = 0.5f;
-			fixtureDef.restitution = 0.75f;
+			fixtureDef.restitution = 0.85f;
 
 			PolygonShape boxShape = new PolygonShape();
 			boxShape.setAsBox(1.0f, 0.75f);

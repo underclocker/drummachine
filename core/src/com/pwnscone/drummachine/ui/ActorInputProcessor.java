@@ -13,6 +13,7 @@ import com.pwnscone.drummachine.util.Misc;
 
 public class ActorInputProcessor implements InputProcessor {
 	private static float mBoundSpeed = .125f;
+	private static float mActorBoundSpeed = .0625f;
 	private static float mBoundBuffer = 1.0f;
 
 	private OrthographicCamera mCamera;
@@ -25,6 +26,7 @@ public class ActorInputProcessor implements InputProcessor {
 	private HitTest mHitTest;
 	private boolean mPress;
 	private float mRotation;
+	private float mSnapCooldown;
 
 	public void create() {
 		mCamera = Game.get().getView().getCamera();
@@ -35,6 +37,7 @@ public class ActorInputProcessor implements InputProcessor {
 		mScreenPosition = new Vector3();
 		mDownOffset = new Vector3();
 		mHitTest = new HitTest();
+		mSnapCooldown = 0;
 	}
 
 	@Override
@@ -68,9 +71,11 @@ public class ActorInputProcessor implements InputProcessor {
 				mDownOffset.set(actorPos.x, actorPos.y, 0.0f);
 				mDownOffset.sub(mPosition);
 				float dist = mDownOffset.len() / mCamera.zoom;
-				if (dist < 1.75f * View.UI_SCALE) {
+				if (dist < 1.75f * View.UI_SCALE && !selectedActor.isLocked()
+						&& !selectedActor.isTranslationLocked()) {
 					InputManager.EDIT = EditMode.TRANSLATE;
-				} else if (dist < 3.5f * View.UI_SCALE) {
+				} else if (dist < 3.5f * View.UI_SCALE && !selectedActor.isLocked()
+						&& !selectedActor.isRotationLocked()) {
 					InputManager.EDIT = EditMode.ROTATE;
 					mRotation = selectedActor.getBody().getAngle()
 							- (float) Math.atan2(mDownOffset.y, mDownOffset.x);
@@ -92,9 +97,8 @@ public class ActorInputProcessor implements InputProcessor {
 		if (pointer == 0) {
 			Actor selectedActor = InputManager.getSelectedActor();
 			if (selectedActor != null) {
-				Body body = selectedActor.getBody();
-				body.setLinearVelocity(Vector2.Zero);
-				body.setAngularVelocity(0.0f);
+				selectedActor.setLinearVelocity(Vector2.Zero);
+				selectedActor.setAngularVelocity(0.0f);
 			}
 			if (mPress && InputManager.EDIT == EditMode.NONE) {
 				mPosition.set(screenX, screenY, 0.0f);
@@ -104,6 +108,9 @@ public class ActorInputProcessor implements InputProcessor {
 				world.QueryAABB(mHitTest, mPosition.x, mPosition.y, mPosition.x, mPosition.y);
 				Actor actor = mHitTest.getActor();
 				InputManager.setSelectedActor(actor);
+				if (actor != null) {
+					actor.resetGhostCycle();
+				}
 			}
 			InputManager.EDIT = EditMode.NONE;
 		}
@@ -136,12 +143,26 @@ public class ActorInputProcessor implements InputProcessor {
 	public void update() {
 		if (InputManager.EDIT == InputManager.EditMode.TRANSLATE) {
 			Actor selectedActor = InputManager.getSelectedActor();
+			if (selectedActor.isLocked() || selectedActor.isTranslationLocked()) {
+				return;
+			}
 			Body body = selectedActor.getBody();
 			Vector3 position = Misc.v3r1;
 			position.set(body.getPosition().x, body.getPosition().y, 0.0f);
 
 			Vector3 offset = Misc.v3r0;
 			offset.set(mPosition).add(mDownOffset).sub(position).scl(10f);
+			mSnapCooldown--;
+			if (selectedActor.isShowingGhost()) {
+				if (body.getPosition().dst2(selectedActor.getGhostPos()) < .1f
+						&& mSnapCooldown <= 0) {
+					if (offset.len2() > 15.0f) {
+						mSnapCooldown = 15;
+					}
+					offset.set(selectedActor.getGhostPos().x, selectedActor.getGhostPos().y, 0.0f);
+					offset.sub(position).scl(8);
+				}
+			}
 
 			Vector2 bounds = Game.get().getLevel().getBounds();
 			if (Math.abs(position.x + offset.x * mBoundSpeed) > bounds.x - mBoundBuffer) {
@@ -152,9 +173,13 @@ public class ActorInputProcessor implements InputProcessor {
 				offset.y = (bounds.y - mBoundBuffer - Math.abs(position.y)) / mBoundSpeed
 						* (offset.y > 0 ? 1.0f : -1.0f);
 			}
-			body.setLinearVelocity(offset.x, offset.y);
+
+			selectedActor.setLinearVelocity(offset.x, offset.y);
 		} else if (InputManager.EDIT == InputManager.EditMode.ROTATE) {
 			Actor selectedActor = InputManager.getSelectedActor();
+			if (selectedActor.isLocked() || selectedActor.isRotationLocked()) {
+				return;
+			}
 			Body body = selectedActor.getBody();
 			Vector2 offset = Misc.v2r0;
 			offset.set(mPosition.x, mPosition.y).sub(body.getPosition()).scl(-1.0f);
@@ -167,7 +192,7 @@ public class ActorInputProcessor implements InputProcessor {
 				int laps = (int) (-angle / Misc.TAU - .5f);
 				angle += Misc.TAU * (1 + laps);
 			}
-			body.setAngularVelocity(angle * 10.0f);
+			selectedActor.setAngularVelocity(angle * 10.0f);
 		}
 	}
 }

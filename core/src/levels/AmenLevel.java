@@ -12,6 +12,7 @@ public class AmenLevel extends Level {
 	public void create() {
 		Spawner spawner = (Spawner) createActor(Spawner.class);
 		spawner.setTransformation(-1.25f, -5.0f, 3.025f);
+		spawner.setLocked(true);
 
 		Snare snare = (Snare) createActor(Snare.class);
 		snare.setTransformation(-4.0f, 4.0f, 0.0f);

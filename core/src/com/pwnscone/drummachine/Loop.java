@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.Color;
 
 public class Loop {
+	private float mProgress;
+	private float mProgressDamper;
+
 	private int mStepSize;
 	private int mStep;
 	private int mSubstep;
@@ -27,12 +30,14 @@ public class Loop {
 	}
 
 	public Loop(int stepSize, int steps, int swing) {
+		mProgressDamper = 50.0f;
+		mProgress = 0;
 		mStep = 0;
 		mStepSize = stepSize;
 		mSubstep = -1;
 		mSteps = steps;
 		mSwing = swing;
-		mSummedSteps = 0;
+		mSummedSteps = -1;
 		mSwingDirection = 1;
 		mTolerance = 1;
 		mSoundEnabled = false;
@@ -71,6 +76,12 @@ public class Loop {
 				}
 			}
 		}
+		float total = 0;
+		for (int i = 0; i < mUsedTracks.size(); i++) {
+			total += mUsedTracks.get(i).getProgress();
+		}
+		mProgress = mProgress * mProgressDamper + total / mUsedTracks.size();
+		mProgress /= mProgressDamper + 1;
 	}
 
 	private void addNote(int time, Track track) {
@@ -119,5 +130,9 @@ public class Loop {
 
 	public ArrayList<Track> getUsedTracks() {
 		return mUsedTracks;
+	}
+
+	public float getProgress() {
+		return mProgress;
 	}
 }

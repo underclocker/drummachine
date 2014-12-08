@@ -26,6 +26,7 @@ public class AssetLoader {
 		am.load("hiHatClosedWhite.png", Texture.class, param);
 		am.load("translateOverlay.png", Texture.class, param);
 		am.load("rotateOverlay.png", Texture.class, param);
+		am.load("lockOverlay.png", Texture.class, param);
 		am.load("particle.png", Texture.class, param);
 
 		am.finishLoading();

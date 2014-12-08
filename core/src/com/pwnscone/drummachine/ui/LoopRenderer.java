@@ -12,6 +12,7 @@ import com.pwnscone.drummachine.Loop;
 import com.pwnscone.drummachine.Synth;
 import com.pwnscone.drummachine.Track;
 import com.pwnscone.drummachine.actors.Actor;
+import com.pwnscone.drummachine.util.Misc;
 
 public class LoopRenderer {
 	private ShapeRenderer mShapeRenderer;
@@ -113,6 +114,12 @@ public class LoopRenderer {
 		// Render Cursor
 		mShapeRenderer.setColor(Color.WHITE);
 		mShapeRenderer.rect(xPos, View.TOP - height, denominator, height);
+
+		float progress = mLoop.getProgress();
+		float channel = (2.0f + progress) / 3.0f;
+		Color tempColor = Misc.cr0.set(channel, channel, channel, channel);
+		mShapeRenderer.setColor(tempColor);
+		mShapeRenderer.rect(0, View.TOP - height * 17.0f / 16.0f, progress, height / 16.0f);
 
 		mShapeRenderer.end();
 		Gdx.gl.glDisable(Gdx.gl.GL_BLEND);

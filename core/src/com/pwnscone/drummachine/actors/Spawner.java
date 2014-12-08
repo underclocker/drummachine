@@ -16,7 +16,7 @@ import com.pwnscone.drummachine.util.Misc;
 
 public class Spawner extends Actor {
 	private Level mLevel;
-	private float mSpeed = 32.0f;
+	private float mExitSpeed = 32.0f;
 	private int mSpawnTimer = 0;
 	private int mSpawnRate = 64;
 
@@ -109,7 +109,7 @@ public class Spawner extends Actor {
 			position.add(offset);
 			Body ballBody = ball.mMainBody;
 			ballBody.setTransform(position, 0.0f);
-			offset.scl(mSpeed);
+			offset.scl(mExitSpeed);
 			ball.mMainBody.setLinearVelocity(offset);
 		}
 		mSpawnTimer--;
@@ -117,6 +117,10 @@ public class Spawner extends Actor {
 
 	public void setSpawnRate(int spawnrate) {
 		mSpawnRate = spawnrate;
+	}
+
+	public void setExitSpeed(float speed) {
+		mExitSpeed = speed;
 	}
 
 	@Override

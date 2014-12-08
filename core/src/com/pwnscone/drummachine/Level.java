@@ -51,7 +51,7 @@ public class Level {
 		mParticles = new Pool<Particle>(Particle.class);
 
 		mLoop = new Loop();
-		mBounds = new Vector2(20.0f, 20.0f);
+		mBounds = new Vector2(500.0f, 500.0f);
 	}
 
 	public void create() {

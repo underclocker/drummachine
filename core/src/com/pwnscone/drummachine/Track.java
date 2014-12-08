@@ -67,4 +67,18 @@ public class Track {
 			return false;
 		}
 	}
+
+	public float getProgress() {
+		float progress = 0;
+		float total = 0;
+		for (int i = 0; i < mNotes.length; i++) {
+			if (mNotes[i]) {
+				total++;
+				if (mNoteStatus[i] > 0) {
+					progress++;
+				}
+			}
+		}
+		return progress / total;
+	}
 }

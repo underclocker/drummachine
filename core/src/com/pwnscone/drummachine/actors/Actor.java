@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.pwnscone.drummachine.Game;
+import com.pwnscone.drummachine.ui.InputManager;
 import com.pwnscone.drummachine.ui.View;
 import com.pwnscone.drummachine.util.Misc;
 import com.pwnscone.drummachine.util.Poolable;
@@ -14,7 +16,10 @@ public class Actor extends Poolable {
 	private static final int FIXTURE_CACHE_SIZE = 4;
 
 	protected Body mMainBody;
-	protected boolean mCollided = false;
+	protected boolean mCollided;
+	protected boolean mLocked;
+	protected boolean mRotationLocked;
+	protected boolean mTranslationLocked;
 
 	protected Fixture[] mCollidedFixturesPrimary;
 	protected Fixture[] mCollidedFixturesSecondary;
@@ -32,15 +37,27 @@ public class Actor extends Poolable {
 	protected float mMinGlow;
 	protected Color mColor;
 
-	protected Vector2 mContactPoint;
-
-	public Actor() {
-		mContactPoint = new Vector2();
-	}
+	protected Vector2 mGhostPos;
+	protected float mGhostRot;
+	protected boolean mShowGhost;
+	protected float mGhostCycle;
+	protected float mGhostCycleSpeed;
 
 	public void create() {
-		mCollidedFixturesPrimary = new Fixture[FIXTURE_CACHE_SIZE];
-		mCollidedFixturesSecondary = new Fixture[FIXTURE_CACHE_SIZE];
+		if (mCollidedFixturesPrimary == null) {
+			mCollidedFixturesPrimary = new Fixture[FIXTURE_CACHE_SIZE];
+			mCollidedFixturesSecondary = new Fixture[FIXTURE_CACHE_SIZE];
+			mGhostPos = new Vector2();
+		}
+		mGhostPos.set(Float.MAX_VALUE, Float.MAX_VALUE);
+		mGhostRot = 0;
+		mShowGhost = false;
+		mGhostCycle = 0;
+		mGhostCycleSpeed = (float) (Math.PI / Game.get().getLevel().getFramesPerBeat());
+		mCollided = false;
+		mLocked = false;
+		mRotationLocked = false;
+		mTranslationLocked = false;
 		mFixtureIndex = -1;
 		mOnTime = 0;
 		mOnTimeDecay = 0.75f;
@@ -48,6 +65,7 @@ public class Actor extends Poolable {
 	}
 
 	public void update() {
+		mGhostCycle += mGhostCycleSpeed;
 		mOnTime *= mOnTimeDecay;
 		mCollided = false;
 		Fixture[] cache = !mFixtureCacheToggle ? mCollidedFixturesPrimary
@@ -83,9 +101,21 @@ public class Actor extends Poolable {
 		spriteBatch.draw(mTexture, pos.x, pos.y, 0, 0, width, height, scale, scale, rot, 0, 0,
 				mTexture.getWidth(), mTexture.getHeight(), false, false);
 		if (mHitTexture != null) {
-			spriteBatch.setColor(1.0f, 1.0f, 1.0f, mOnTime);
-			spriteBatch.draw(mHitTexture, pos.x, pos.y, 0, 0, width, height, scale, scale, rot, 0,
-					0, mHitTexture.getWidth(), mHitTexture.getHeight(), false, false);
+			if (mOnTime >= 0.0038f) {
+				spriteBatch.setColor(1.0f, 1.0f, 1.0f, mOnTime);
+				spriteBatch.draw(mHitTexture, pos.x, pos.y, 0, 0, width, height, scale, scale, rot,
+						0, 0, mHitTexture.getWidth(), mHitTexture.getHeight(), false, false);
+			}
+			if (mShowGhost && InputManager.getSelectedActor() == this) {
+				pos.set(mOffset);
+				pos.rotate(mGhostRot);
+				pos.add(mGhostPos);
+				spriteBatch.setColor(1.0f, 1.0f, 1.0f, 0.3f - ((float) Math.cos(mGhostCycle)) * .1f
+						- .2f * (10 / (10 + mGhostCycle)));
+				spriteBatch.draw(mHitTexture, pos.x, pos.y, 0, 0, width, height, scale, scale,
+						mGhostRot, 0, 0, mHitTexture.getWidth(), mHitTexture.getHeight(), false,
+						false);
+			}
 		}
 	}
 
@@ -140,8 +170,16 @@ public class Actor extends Poolable {
 		}
 	}
 
-	public void setContactPoint(Vector2 point) {
-		mContactPoint.set(point);
+	public void setLinearVelocity(float x, float y) {
+		mMainBody.setLinearVelocity(x, y);
+	}
+
+	public void setLinearVelocity(Vector2 velocity) {
+		mMainBody.setLinearVelocity(velocity);
+	}
+
+	public void setAngularVelocity(float velocity) {
+		mMainBody.setAngularVelocity(velocity);
 	}
 
 	public Color getColor() {
@@ -150,5 +188,50 @@ public class Actor extends Poolable {
 
 	public float getOnTime() {
 		return mOnTime;
+	}
+
+	public void setLocked(boolean locked) {
+		mLocked = locked;
+	}
+
+	public boolean isLocked() {
+		return mLocked;
+	}
+
+	public void setRotationLocked(boolean locked) {
+		mRotationLocked = locked;
+	}
+
+	public boolean isRotationLocked() {
+		return mRotationLocked;
+	}
+
+	public void setTranslationLocked(boolean locked) {
+		mTranslationLocked = locked;
+	}
+
+	public boolean isTranslationLocked() {
+		return mTranslationLocked;
+	}
+
+	public void setGhostTransform(Vector2 pos, float rot) {
+		mGhostPos.set(pos);
+		mGhostRot = Misc.RAD_TO_DEG * rot;
+	}
+
+	public void showGhost(boolean show) {
+		mShowGhost = show;
+	}
+
+	public void resetGhostCycle() {
+		mGhostCycle = 0;
+	}
+
+	public boolean isShowingGhost() {
+		return mShowGhost;
+	}
+
+	public Vector2 getGhostPos() {
+		return mGhostPos;
 	}
 }

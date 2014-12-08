@@ -104,14 +104,13 @@ public class Ball extends Actor {
 		mCollided = true;
 		Actor otherActor = (Actor) otherFixture.getBody().getUserData();
 		if (otherActor.mOnTime == 1.0f) {
-			for (int i = 0; i < 2; i++) {
+			for (int i = 0; i < 1; i++) {
 				Particle particle = Game.get().getLevel().createParticle();
-				particle.mPosition.set(this.mContactPoint);
+				particle.mPosition.set(this.getPosition());
 				particle.setActor(otherActor);
-				Vector2 vel = Misc.v2r0.set(this.getPosition());
-				vel.sub(this.mContactPoint);
-				vel.rotate(80.0f - Misc.random() * 160.0f);
-				vel.scl(.01f * (4 + Misc.random()));
+				Vector2 vel = Misc.v2r0.set(mMainBody.getLinearVelocity());
+				vel.rotate(Misc.random() * 360.0f);
+				vel.scl(.0001f * (4 + Misc.random()));
 				particle.mVelocity.set(vel);
 			}
 		}
@@ -142,5 +141,4 @@ public class Ball extends Actor {
 					mTexture.getWidth(), mTexture.getHeight(), false, false);
 		}
 	}
-
 }

@@ -1,6 +1,6 @@
 package com.pwnscone.drummachine;
 
-import levels.AmenLevel;
+import levels.BeginnerLevel;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -44,7 +44,7 @@ public class Game extends ApplicationAdapter {
 		mAssetManager = new AssetManager();
 		AssetLoader.loadAssets();
 
-		mCurrentLevel = new AmenLevel();
+		mCurrentLevel = new BeginnerLevel();
 		mView = new View();
 		mSceneInputProcessor = new SceneInputProcessor();
 		mActorInputProcessor = new ActorInputProcessor();
