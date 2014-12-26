@@ -262,4 +262,11 @@ public class SceneInputProcessor implements InputProcessor {
 		mCamera.position.x += mBoundSpeed * xDelta;
 		mCamera.position.y += mBoundSpeed * yDelta;
 	}
+
+	public void clearMomentum() {
+		mZoomVelocity = 0;
+		if (mVelocity != null) {
+			mVelocity.setZero();
+		}
+	}
 }

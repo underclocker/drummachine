@@ -14,7 +14,7 @@ public class InputManager {
 
 	public static void setSelectedActor(Actor actor) {
 		mSelectedActor = actor;
-	};
+	}
 
 	public static Actor getSelectedActor() {
 		return mSelectedActor;

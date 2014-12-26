@@ -130,8 +130,11 @@ public class Game extends ApplicationAdapter {
 		if (mCurrentLevel != null) {
 			mCurrentLevel.destroy();
 		}
+		mSceneInputProcessor.clearMomentum();
 		InputManager.setSelectedActor(null);
 		mSynth.clearHistory();
+		mView.resetCamera();
+		mView.resetCameraTransform();
 		try {
 			mCurrentLevel = (Level) mLevels.get(index).newInstance();
 		} catch (Exception e) {

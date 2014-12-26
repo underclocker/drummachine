@@ -11,6 +11,7 @@ import com.pwnscone.drummachine.actors.Spawner;
 public class PopRockLevel extends Level {
 	public void create() {
 		Spawner spawner = (Spawner) createActor(Spawner.class);
+		spawner.setTranslationLocked(true);
 		spawner.setTransformation(-1.25f, -5.0f, 2.5f);
 
 		Snare snare = (Snare) createActor(Snare.class);

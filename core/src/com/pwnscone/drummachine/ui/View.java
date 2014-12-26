@@ -170,12 +170,17 @@ public class View {
 		UI_SCALE = 600.0f / (Gdx.graphics.getHeight() / DENSITY);
 
 		mCamera.setToOrtho(false, WIDTH, HEIGHT);
-		mCamera.zoom = 1.0f;
 		mCamera.position.set(position);
 		mCamera.update();
 
 		mUICamera.setToOrtho(false, 1.0f, HEIGHT / WIDTH);
 		mUICamera.update();
+	}
+
+	public void resetCameraTransform() {
+		mCamera.zoom = 1.0f;
+		mCamera.position.setZero();
+		mCamera.update();
 	}
 
 	public OrthographicCamera getCamera() {
