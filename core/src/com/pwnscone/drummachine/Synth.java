@@ -1,5 +1,7 @@
 package com.pwnscone.drummachine;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.pwnscone.drummachine.actors.Actor;
 
@@ -21,6 +23,7 @@ public class Synth {
 	private Instrument mHiHatOpen;
 	private Instrument mSnare;
 	private Instrument mKick;
+	private ArrayList<Instrument> mInstruments;
 
 	public Synth() {
 		mBufferSamples = SAMPLING_RATE * BUFFER_LENGTH;
@@ -33,6 +36,12 @@ public class Synth {
 		mHiHatOpen = new Instrument("hiHatOpen.raw");
 		mSnare = new Instrument("snare.raw");
 		mKick = new Instrument("kick.raw");
+
+		mInstruments = new ArrayList<Instrument>();
+		mInstruments.add(mHiHatClosed);
+		mInstruments.add(mHiHatOpen);
+		mInstruments.add(mSnare);
+		mInstruments.add(mKick);
 	}
 
 	public void update() {
@@ -44,6 +53,12 @@ public class Synth {
 		int combinedIndex = mIndex + mAheadIndex;
 		for (int i = 0; i < clip.length; i++) {
 			mTrack[(i + combinedIndex) % mBufferSamples] += clip[i];
+		}
+	}
+
+	public void clearHistory() {
+		for (int i = 0; i < mInstruments.size(); i++) {
+			mInstruments.get(i).clearHistory();
 		}
 	}
 

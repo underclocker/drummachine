@@ -43,6 +43,7 @@ public class View {
 	private Texture mTranslateOverlay;
 	private Texture mRotateOverlay;
 	private Texture mLockOverlay;
+	private Texture mNext;
 	private Level mLevel;
 	private World mWorld;
 
@@ -73,6 +74,7 @@ public class View {
 		mTranslateOverlay = assetManager.get("translateOverlay.png", Texture.class);
 		mRotateOverlay = assetManager.get("rotateOverlay.png", Texture.class);
 		mLockOverlay = assetManager.get("lockOverlay.png", Texture.class);
+		mNext = assetManager.get("next.png", Texture.class);
 	}
 
 	public void update() {
@@ -139,6 +141,15 @@ public class View {
 		mSpriteBatch.end();
 
 		mLoopRenderer.render();
+
+		if (mLevel.isComplete()) {
+			mSpriteBatch.setProjectionMatrix(mUICamera.combined);
+			mSpriteBatch.begin();
+			float scale = UI_SCALE * INV_RATIO / 8.0f;
+			mSpriteBatch.draw(mNext, 1 - scale * 1.125f, scale * .125f, scale, scale);
+			mSpriteBatch.end();
+		}
+
 	}
 
 	public void setLevel(Level level) {
@@ -160,6 +171,7 @@ public class View {
 		UI_SCALE = 600.0f / (Gdx.graphics.getHeight() / DENSITY);
 
 		mCamera.setToOrtho(false, WIDTH, HEIGHT);
+		mCamera.zoom = 1.0f;
 		mCamera.position.set(position);
 		mCamera.update();
 

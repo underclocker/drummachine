@@ -26,7 +26,11 @@ public class Level {
 	protected Vector2 mBounds;
 	protected Vector2 mGravity;
 
+	protected int mCompletionDelay;
+	protected int mCompletionTimer;
+
 	public Level() {
+		mCompletionDelay = 15;
 		mFramesPerBeat = 64;
 		mGravity = new Vector2(0.0f, -4.9f);
 		mWorld = new World(mGravity, true);
@@ -83,6 +87,12 @@ public class Level {
 
 		if (mLoop != null) {
 			mLoop.update();
+		}
+
+		if (mLoop.getProgress() > 0.99f) {
+			mCompletionTimer--;
+		} else {
+			mCompletionTimer = mCompletionDelay;
 		}
 
 		while (mDestroyQueue.size() > 0) {
@@ -142,5 +152,13 @@ public class Level {
 
 	public Vector2 getBounds() {
 		return mBounds;
+	}
+
+	public boolean isComplete() {
+		return mCompletionTimer <= 0;
+	}
+
+	public void destroy() {
+		mWorld.dispose();
 	}
 }

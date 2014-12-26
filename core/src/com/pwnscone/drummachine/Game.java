@@ -1,6 +1,10 @@
 package com.pwnscone.drummachine;
 
+import java.util.ArrayList;
+
+import levels.AmenLevel;
 import levels.BeginnerLevel;
+import levels.PopRockLevel;
 
 import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -9,6 +13,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
 import com.pwnscone.drummachine.ui.ActorInputProcessor;
 import com.pwnscone.drummachine.ui.AssetLoader;
+import com.pwnscone.drummachine.ui.InputManager;
 import com.pwnscone.drummachine.ui.SceneInputProcessor;
 import com.pwnscone.drummachine.ui.View;
 import com.pwnscone.drummachine.util.Starter;
@@ -21,6 +26,10 @@ public class Game extends ApplicationAdapter {
 	private InputMultiplexer mInputMultiplexer;
 	private AssetManager mAssetManager;
 	private Synth mSynth;
+
+	private ArrayList<Class<?>> mLevels;
+	private int mLevelIndex;
+	private boolean mGoToNextLevel;
 
 	public static boolean MOBILE;
 	public static Starter STARTER;
@@ -44,7 +53,14 @@ public class Game extends ApplicationAdapter {
 		mAssetManager = new AssetManager();
 		AssetLoader.loadAssets();
 
-		mCurrentLevel = new BeginnerLevel();
+		mLevelIndex = 0;
+		mLevels = new ArrayList<Class<?>>();
+		mLevels.add(BeginnerLevel.class);
+		mLevels.add(PopRockLevel.class);
+		mLevels.add(AmenLevel.class);
+
+		loadLevel(mLevelIndex);
+
 		mView = new View();
 		mSceneInputProcessor = new SceneInputProcessor();
 		mActorInputProcessor = new ActorInputProcessor();
@@ -81,6 +97,11 @@ public class Game extends ApplicationAdapter {
 		mActorInputProcessor.update();
 		mSceneInputProcessor.update();
 		mSynth.update();
+		if (mGoToNextLevel) {
+
+			loadLevel(++mLevelIndex % mLevels.size());
+			mGoToNextLevel = false;
+		}
 	}
 
 	public Level getLevel() {
@@ -102,5 +123,22 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void resize(int width, int height) {
 		mView.resetCamera();
+	}
+
+	public void nextLevel() {
+		mGoToNextLevel = true;
+	}
+
+	private void loadLevel(int index) {
+		mCurrentLevel.destroy();
+		InputManager.setSelectedActor(null);
+		mSynth.clearHistory();
+		mView.resetCamera();
+		try {
+			mCurrentLevel = (Level) mLevels.get(index).newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mCurrentLevel.create();
 	}
 }

@@ -47,6 +47,14 @@ public class Instrument {
 		return mHistoryIndex;
 	}
 
+	public void clearHistory() {
+		for (int i = 0; i < mHistory.length; i++) {
+			mHistory[i] = -1;
+			mActorHistory[i] = null;
+			mHistoryIndex = 0;
+		}
+	}
+
 	public void setTrack(Track track) {
 		mTrack = track;
 	}

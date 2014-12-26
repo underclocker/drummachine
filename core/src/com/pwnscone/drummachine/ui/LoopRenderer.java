@@ -12,7 +12,6 @@ import com.pwnscone.drummachine.Loop;
 import com.pwnscone.drummachine.Synth;
 import com.pwnscone.drummachine.Track;
 import com.pwnscone.drummachine.actors.Actor;
-import com.pwnscone.drummachine.util.Misc;
 
 public class LoopRenderer {
 	private ShapeRenderer mShapeRenderer;
@@ -39,8 +38,8 @@ public class LoopRenderer {
 		Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 
 		mShapeRenderer.begin(ShapeType.Filled);
-		ArrayList<Track> mTracks = mLoop.getUsedTracks();
-		int size = mTracks.size();
+		ArrayList<Track> tracks = mLoop.getUsedTracks();
+		int size = tracks.size();
 
 		// Render Desired Notes
 		int framesTotal = mLoop.getSteps() * mLoop.getStepSize();
@@ -49,7 +48,7 @@ public class LoopRenderer {
 		float barWidth = (1.0f + 2.0f * mLoop.getTolerance()) * denominator;
 		float swing = mLoop.getSwing() * denominator;
 		for (int i = 0; i < size; i++) {
-			Track track = mTracks.get(i);
+			Track track = tracks.get(i);
 			boolean[] notes = track.mNotes;
 			byte[] noteStatus = track.mNoteStatus;
 			float length = notes.length;
@@ -79,7 +78,7 @@ public class LoopRenderer {
 		Color color;
 		Actor selectedActor = InputManager.getSelectedActor();
 		for (int i = 0; i < size; i++) {
-			Track track = mTracks.get(i);
+			Track track = tracks.get(i);
 			Instrument instrument = track.mInstrument;
 			int[] history = instrument.getHistory();
 			Actor[] actorHistory = instrument.getActorHistory();
@@ -115,11 +114,13 @@ public class LoopRenderer {
 		mShapeRenderer.setColor(Color.WHITE);
 		mShapeRenderer.rect(xPos, View.TOP - height, denominator, height);
 
-		float progress = mLoop.getProgress();
-		float channel = (2.0f + progress) / 3.0f;
-		Color tempColor = Misc.cr0.set(channel, channel, channel, channel);
-		mShapeRenderer.setColor(tempColor);
-		mShapeRenderer.rect(0, View.TOP - height * 17.0f / 16.0f, progress, height / 16.0f);
+		/*
+		 * float progress = mLoop.getProgress(); float channel = (2.0f +
+		 * progress) / 3.0f; Color tempColor = Misc.cr0.set(channel, channel,
+		 * channel, channel); mShapeRenderer.setColor(tempColor);
+		 * mShapeRenderer.rect(0, View.TOP - height * 17.0f / 16.0f, progress,
+		 * height / 16.0f);
+		 */
 
 		mShapeRenderer.end();
 		Gdx.gl.glDisable(Gdx.gl.GL_BLEND);

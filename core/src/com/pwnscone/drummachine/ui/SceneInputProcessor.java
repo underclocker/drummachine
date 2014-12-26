@@ -116,10 +116,18 @@ public class SceneInputProcessor implements InputProcessor {
 			mZeroDown = false;
 			mOneDownPosition.set(Gdx.input.getX(1), Gdx.input.getY(1), 0.0f);
 			mCamera.unproject(mOneDownPosition);
+
 		} else {
 			mOneDown = false;
 			mZeroDownPosition.set(Gdx.input.getX(0), Gdx.input.getY(0), 0.0f);
 			mCamera.unproject(mZeroDownPosition);
+			if (pointer == 2) {
+				if (Game.get().getLevel().isComplete()) {
+					Game.get().nextLevel();
+				}
+			} else if (pointer == 4) {
+				Game.get().nextLevel();
+			}
 		}
 		return false;
 	}
