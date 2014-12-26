@@ -59,8 +59,6 @@ public class Game extends ApplicationAdapter {
 		mLevels.add(PopRockLevel.class);
 		mLevels.add(AmenLevel.class);
 
-		loadLevel(mLevelIndex);
-
 		mView = new View();
 		mSceneInputProcessor = new SceneInputProcessor();
 		mActorInputProcessor = new ActorInputProcessor();
@@ -69,11 +67,11 @@ public class Game extends ApplicationAdapter {
 		mInputMultiplexer.addProcessor(mSceneInputProcessor);
 		Gdx.input.setInputProcessor(mInputMultiplexer);
 
+		loadLevel(mLevelIndex);
 		// Create after all main objects are instantiated.
 		mView.create();
 		mActorInputProcessor.create();
 		mSceneInputProcessor.create();
-		mCurrentLevel.create();
 
 		if (STARTER != null) {
 			STARTER.startProcess();
@@ -98,7 +96,6 @@ public class Game extends ApplicationAdapter {
 		mSceneInputProcessor.update();
 		mSynth.update();
 		if (mGoToNextLevel) {
-
 			loadLevel(++mLevelIndex % mLevels.size());
 			mGoToNextLevel = false;
 		}
@@ -130,10 +127,11 @@ public class Game extends ApplicationAdapter {
 	}
 
 	private void loadLevel(int index) {
-		mCurrentLevel.destroy();
+		if (mCurrentLevel != null) {
+			mCurrentLevel.destroy();
+		}
 		InputManager.setSelectedActor(null);
 		mSynth.clearHistory();
-		mView.resetCamera();
 		try {
 			mCurrentLevel = (Level) mLevels.get(index).newInstance();
 		} catch (Exception e) {

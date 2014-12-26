@@ -12,7 +12,7 @@ import com.pwnscone.drummachine.util.Misc;
 
 public class BeginnerLevel extends Level {
 	public void create() {
-		this.mBounds.set(6.0f, 10.0f);
+		this.mBounds.set(4.0f, 8.0f);
 		Spawner spawner = (Spawner) createActor(Spawner.class);
 		spawner.setTransformation(-2.1f, 4.0f, 0.95f);
 		spawner.setExitSpeed(16.0f);
@@ -37,8 +37,6 @@ public class BeginnerLevel extends Level {
 		hhc = (HiHatClosed) createActor(HiHatClosed.class);
 		hhc.setTransformation(-2.33f, -1.68f, 1.00f);
 		hhc.setLocked(true);
-
-		// hhc.setLocked(true);
 
 		mLoop = new Loop(16, 8, 0);
 

@@ -159,7 +159,6 @@ public class View {
 	}
 
 	public void resetCamera() {
-
 		RATIO = Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight();
 		INV_RATIO = (float) (1.0f / (RATIO));
 		WIDTH = HEIGHT * RATIO;

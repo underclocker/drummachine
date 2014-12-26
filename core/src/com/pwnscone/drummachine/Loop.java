@@ -30,7 +30,7 @@ public class Loop {
 	}
 
 	public Loop(int stepSize, int steps, int swing) {
-		mProgressDamper = 50.0f;
+		mProgressDamper = 10.0f;
 		mProgress = 0;
 		mStep = 0;
 		mStepSize = stepSize;
