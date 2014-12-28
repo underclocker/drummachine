@@ -14,7 +14,7 @@ import com.pwnscone.drummachine.util.Misc;
 public class ActorInputProcessor implements InputProcessor {
 	private static float mBoundSpeed = .125f;
 	private static float mActorBoundSpeed = .0625f;
-	private static float mBoundBuffer = 1.0f;
+	private static float mBoundBuffer = 0.25f;
 
 	private OrthographicCamera mCamera;
 	private boolean mDown;
@@ -154,16 +154,16 @@ public class ActorInputProcessor implements InputProcessor {
 			offset.set(mPosition).add(mDownOffset).sub(position).scl(10f);
 			mSnapCooldown--;
 			if (selectedActor.isShowingGhost()) {
-				if (body.getPosition().dst2(selectedActor.getGhostPos()) < .1f
-						&& mSnapCooldown <= 0) {
-					if (offset.len2() > 15.0f) {
-						mSnapCooldown = 15;
+				float dist = body.getPosition().dst2(selectedActor.getGhostPos());
+				if (dist < 0.125f && mSnapCooldown <= 0) {
+					if (offset.len2() > 30.0f) {
+						mSnapCooldown = 30;
 					}
 					offset.set(selectedActor.getGhostPos().x, selectedActor.getGhostPos().y, 0.0f);
-					offset.sub(position).scl(8);
+					offset.sub(position).scl(15);
+
 				}
 			}
-
 			Vector2 bounds = Game.get().getLevel().getBounds();
 			if (Math.abs(position.x + offset.x * mBoundSpeed) > bounds.x - mBoundBuffer) {
 				offset.x = (bounds.x - mBoundBuffer - Math.abs(position.x)) / mBoundSpeed

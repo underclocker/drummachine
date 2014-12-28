@@ -2,7 +2,7 @@ package com.pwnscone.drummachine;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.Color;
+import com.pwnscone.drummachine.util.Misc;
 
 public class Loop {
 	private float mProgress;
@@ -30,7 +30,7 @@ public class Loop {
 	}
 
 	public Loop(int stepSize, int steps, int swing) {
-		mProgressDamper = 10.0f;
+		mProgressDamper = 2.0f;
 		mProgress = 0;
 		mStep = 0;
 		mStepSize = stepSize;
@@ -44,10 +44,10 @@ public class Loop {
 
 		Synth synth = Game.get().getSynth();
 
-		mHiHatClosed = new Track(synth.getHiHatClosed(), this, Color.RED);
-		mHiHatOpen = new Track(synth.getHiHatOpen(), this, Color.GREEN);
-		mSnare = new Track(synth.getSnare(), this, Color.BLUE);
-		mKick = new Track(synth.getKick(), this, Color.ORANGE);
+		mHiHatClosed = new Track(synth.getHiHatClosed(), this, Misc.PINK);
+		mHiHatOpen = new Track(synth.getHiHatOpen(), this, Misc.YELLOW);
+		mSnare = new Track(synth.getSnare(), this, Misc.TURQUOISE);
+		mKick = new Track(synth.getKick(), this, Misc.YELLOW);
 
 		mUsedTracks = new ArrayList<Track>();
 	}

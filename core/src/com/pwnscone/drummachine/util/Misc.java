@@ -17,6 +17,10 @@ public class Misc {
 
 	public static Color cr0 = new Color();
 
+	public static Color PINK = new Color(0xdb2e7bff);
+	public static Color YELLOW = new Color(0xffae00ff);
+	public static Color TURQUOISE = new Color(0x32f4adff);
+
 	private static float[] randoms;
 	private static int randIndex;
 

@@ -42,6 +42,7 @@ public class Actor extends Poolable {
 	protected boolean mShowGhost;
 	protected float mGhostCycle;
 	protected float mGhostCycleSpeed;
+	protected boolean mSnapped;
 
 	public void create() {
 		if (mCollidedFixturesPrimary == null) {
@@ -53,7 +54,7 @@ public class Actor extends Poolable {
 		mGhostRot = 0;
 		mShowGhost = false;
 		mGhostCycle = 0;
-		mGhostCycleSpeed = (float) (Math.PI / Game.get().getLevel().getFramesPerBeat());
+		mGhostCycleSpeed = (float) (2 * Math.PI / Game.get().getLevel().getFramesPerBeat());
 		mCollided = false;
 		mLocked = false;
 		mRotationLocked = false;
@@ -61,7 +62,7 @@ public class Actor extends Poolable {
 		mFixtureIndex = -1;
 		mOnTime = 0;
 		mOnTimeDecay = 0.75f;
-		mMinGlow = 0.425f;
+		mMinGlow = 0.9f;
 	}
 
 	public void update() {
@@ -106,7 +107,7 @@ public class Actor extends Poolable {
 				spriteBatch.draw(mHitTexture, pos.x, pos.y, 0, 0, width, height, scale, scale, rot,
 						0, 0, mHitTexture.getWidth(), mHitTexture.getHeight(), false, false);
 			}
-			if (mShowGhost && InputManager.getSelectedActor() == this) {
+			if (mShowGhost && InputManager.getSelectedActor() == this && !mLocked) {
 				pos.set(mOffset);
 				pos.rotate(mGhostRot);
 				pos.add(mGhostPos);
@@ -233,5 +234,11 @@ public class Actor extends Poolable {
 
 	public Vector2 getGhostPos() {
 		return mGhostPos;
+	}
+
+	public float getDistFromGhost() {
+		Vector2 v0 = Misc.v2r0.set(getGhostPos());
+		v0.sub(mMainBody.getPosition());
+		return v0.len2();
 	}
 }

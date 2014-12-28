@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -16,7 +17,7 @@ import com.pwnscone.drummachine.util.Misc;
 
 public class Spawner extends Actor {
 	private Level mLevel;
-	private float mExitSpeed = 32.0f;
+	private float mExitSpeed = 8.0f;
 	private int mSpawnTimer = 0;
 	private int mSpawnRate = 64;
 
@@ -39,7 +40,7 @@ public class Spawner extends Actor {
 
 			float scale = .25f;
 
-			float[] verts = { 1, -3, 2, -2, 2, 1, 1, 2 };
+			float[] verts = { 1, -6, 2, 0, 1, 0 };
 			Misc.scaleArray(verts, scale);
 			PolygonShape poly = new PolygonShape();
 			poly.set(verts);
@@ -47,7 +48,7 @@ public class Spawner extends Actor {
 			mainBody.createFixture(fixtureDef);
 			poly.dispose();
 
-			float[] verts2 = { 1, 2, -1, 2, 1, 0 };
+			float[] verts2 = { -2, 0, -1, -6, -1, 0 };
 			Misc.scaleArray(verts2, scale);
 			poly = new PolygonShape();
 			poly.set(verts2);
@@ -55,26 +56,22 @@ public class Spawner extends Actor {
 			mainBody.createFixture(fixtureDef);
 			poly.dispose();
 
-			float[] verts3 = { -1, 2, -2, 1, -1, 0, 0, 1 };
-			Misc.scaleArray(verts3, scale);
-			poly = new PolygonShape();
-			poly.set(verts3);
-			fixtureDef.shape = poly;
+			CircleShape circle = new CircleShape();
+			circle.setRadius(0.5f);
+			fixtureDef.shape = circle;
 			mainBody.createFixture(fixtureDef);
-			poly.dispose();
-
-			float[] verts4 = { -2, 1, -2, -2, -1, -3, -1, 0 };
-			Misc.scaleArray(verts4, scale);
-			poly = new PolygonShape();
-			poly.set(verts4);
-			fixtureDef.shape = poly;
-			mainBody.createFixture(fixtureDef);
-			poly.dispose();
+			circle.dispose();
 
 			// Hit Sensor
 			fixtureDef.isSensor = true;
 
-			float[] verts5 = { 1, -3, 2, -2, 2, 1, 1, 2, -1, 2, -2, 1, -2, -2, -1, -3 };
+			circle = new CircleShape();
+			circle.setRadius(0.5f);
+			fixtureDef.shape = circle;
+			mainBody.createFixture(fixtureDef);
+			circle.dispose();
+
+			float[] verts5 = { -1, -6, 1, -6, 2, 0, -2, 0 };
 			Misc.scaleArray(verts5, scale);
 			poly = new PolygonShape();
 			poly.set(verts5);
@@ -85,7 +82,7 @@ public class Spawner extends Actor {
 			// Graphics
 
 			mTexture = Game.get().getAssetManager().get("spawner.png", Texture.class);
-			mOffset = new Vector2(-0.5f, -0.75f);
+			mOffset = new Vector2(-0.5f, -1.5f);
 			mScale = .25f;
 			mColor = Color.GRAY;
 
@@ -102,14 +99,14 @@ public class Spawner extends Actor {
 			mSpawnTimer = mSpawnRate;
 			Ball ball = (Ball) mLevel.createActor(Ball.class);
 			Vector2 offset = Misc.v2r0;
-			offset.set(0.0f, -.25f);
+			offset.set(0.0f, -1.25f);
 			offset.rotate(mMainBody.getAngle() * Misc.RAD_TO_DEG);
 			Vector2 position = Misc.v2r1;
 			position.set(mMainBody.getPosition());
 			position.add(offset);
 			Body ballBody = ball.mMainBody;
-			ballBody.setTransform(position, 0.0f);
-			offset.scl(mExitSpeed);
+			ballBody.setTransform(position, (float) (Math.PI * 0.25f));
+			offset.nor().scl(mExitSpeed);
 			ball.mMainBody.setLinearVelocity(offset);
 		}
 		mSpawnTimer--;

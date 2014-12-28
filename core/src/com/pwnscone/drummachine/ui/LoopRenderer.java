@@ -12,6 +12,7 @@ import com.pwnscone.drummachine.Loop;
 import com.pwnscone.drummachine.Synth;
 import com.pwnscone.drummachine.Track;
 import com.pwnscone.drummachine.actors.Actor;
+import com.pwnscone.drummachine.actors.Ball;
 
 public class LoopRenderer {
 	private ShapeRenderer mShapeRenderer;
@@ -29,13 +30,14 @@ public class LoopRenderer {
 		float height = mTotalHeight * View.INV_RATIO;
 
 		// Render Background
-		Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
-		Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA, Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
-		mShapeRenderer.begin(ShapeType.Filled);
-		mShapeRenderer.setColor(mBackgroundColor);
-		mShapeRenderer.rect(0, View.TOP - height, 1.0f, height);
-		mShapeRenderer.end();
-		Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
+		// Gdx.gl.glEnable(Gdx.gl.GL_BLEND);
+		// Gdx.gl.glBlendFunc(Gdx.gl.GL_SRC_ALPHA,
+		// Gdx.gl.GL_ONE_MINUS_SRC_ALPHA);
+		// mShapeRenderer.begin(ShapeType.Filled);
+		// mShapeRenderer.setColor(mBackgroundColor);
+		// mShapeRenderer.rect(0, View.TOP - height, 1.0f, height);
+		// mShapeRenderer.end();
+		// Gdx.gl.glDisable(Gdx.gl.GL_BLEND);
 
 		mShapeRenderer.begin(ShapeType.Filled);
 		ArrayList<Track> tracks = mLoop.getUsedTracks();
@@ -111,8 +113,13 @@ public class LoopRenderer {
 		}
 
 		// Render Cursor
-		mShapeRenderer.setColor(Color.WHITE);
-		mShapeRenderer.rect(xPos, View.TOP - height, denominator, height);
+		for (int i = 0; i < Ball.TRAIL_LENGTH; i++) {
+			float tint = 1.0f - i / (float) Ball.TRAIL_LENGTH;
+			mShapeRenderer.setColor(tint, tint, tint, tint);
+			xPos = (mLoop.getSummedSteps() + 1 - i) * denominator + .5f / mLoop.getSteps();
+			xPos -= Math.floor(xPos);
+			mShapeRenderer.rect(xPos, View.TOP - height, denominator, height);
+		}
 
 		/*
 		 * float progress = mLoop.getProgress(); float channel = (2.0f +

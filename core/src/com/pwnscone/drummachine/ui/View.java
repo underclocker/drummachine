@@ -44,13 +44,9 @@ public class View {
 	private Texture mRotateOverlay;
 	private Texture mLockOverlay;
 	private Texture mNext;
+	private Texture mBackground;
 	private Level mLevel;
 	private World mWorld;
-
-	/*
-	 * private Color mBackgroundColor; private FrameBuffer mBackgroundBuffer;
-	 * private TextureRegion mBackgroundTextureRegion;
-	 */
 
 	public View() {
 		mCamera = new OrthographicCamera();
@@ -75,19 +71,22 @@ public class View {
 		mRotateOverlay = assetManager.get("rotateOverlay.png", Texture.class);
 		mLockOverlay = assetManager.get("lockOverlay.png", Texture.class);
 		mNext = assetManager.get("next.png", Texture.class);
+		mBackground = assetManager.get("background.png", Texture.class);
 	}
 
 	public void update() {
 
 		mShapeRenderer.setProjectionMatrix(mUICamera.combined);
-		mSpriteBatch.setProjectionMatrix(mCamera.combined);
 
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		if (RENDER_DEBUG) {
-			mDebugRenderer.render(mWorld, mCamera.combined);
-		}
+		mSpriteBatch.setProjectionMatrix(mUICamera.combined);
+		mSpriteBatch.begin();
+		mSpriteBatch.draw(mBackground, 0, 0, 1.0f, TOP);
+		mSpriteBatch.end();
+
+		mSpriteBatch.setProjectionMatrix(mCamera.combined);
 
 		Pool<Particle> particles = Game.get().getLevel().getParticles();
 		int listSize = particles.fill;
@@ -139,6 +138,9 @@ public class View {
 		}
 
 		mSpriteBatch.end();
+		if (RENDER_DEBUG) {
+			mDebugRenderer.render(mWorld, mCamera.combined);
+		}
 
 		mLoopRenderer.render();
 

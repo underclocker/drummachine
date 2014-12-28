@@ -24,7 +24,7 @@ public class Particle extends Poolable {
 	protected float mLife;
 	protected Color mColor;
 
-	private static int LIFE = 60;
+	private static int LIFE = 7;
 
 	public void create() {
 		if (mPosition == null) {
@@ -33,7 +33,7 @@ public class Particle extends Poolable {
 			mOffset = new Vector2();
 			mVelocity = new Vector2();
 			mGravity = Game.get().getLevel().getGravity().cpy().scl(.0003f);
-			mScale = 0.5f;
+			mScale = 0.125f;
 			mTurn = 10 * (Misc.random() - 0.5f);
 		}
 		mVelocity.set(0.0f, 0.0f);
@@ -62,10 +62,9 @@ public class Particle extends Poolable {
 		float lifeRatio = mLife / mLifeStart;
 		float mirrorRatio = 1.0f - lifeRatio;
 
-		spriteBatch.setColor(mColor.r, mColor.g, mColor.b, (0.3f + mActor.getOnTime() * 0.7f)
-				* lifeRatio);
+		spriteBatch.setColor(mColor.r, mColor.g, mColor.b, lifeRatio);
 
-		float scale = mScale * (mirrorRatio + 0.05f);
+		float scale = mScale * (mirrorRatio + 1.0f);
 		float width = mTexture.getWidth() * View.SCREEN_SCALE;
 		float height = mTexture.getHeight() * View.SCREEN_SCALE;
 		float halfw = width / 2 * scale;

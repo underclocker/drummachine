@@ -30,7 +30,7 @@ public class Level {
 	protected int mCompletionTimer;
 
 	public Level() {
-		mCompletionDelay = 15;
+		mCompletionDelay = 200;
 		mFramesPerBeat = 64;
 		mGravity = new Vector2(0.0f, -4.9f);
 		mWorld = new World(mGravity, true);

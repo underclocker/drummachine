@@ -19,7 +19,7 @@ import com.pwnscone.drummachine.util.Misc;
 public class Ball extends Actor {
 	private static int POS_HIST_SIZE = 30;
 	private static float EPSILON = 0.0001f;
-	public static int TRAIL_LENGTH = 3;
+	public static int TRAIL_LENGTH = 5;
 
 	private float[] xPos;
 	private float[] yPos;
